@@ -24,4 +24,7 @@ message: "API is healthy"
 const productRoutes = require("./routes/productRoutes");
 
 app.use("/api/products", productRoutes);
+
+const categoryRoutes = require("./routes/categoryRoutes");
+app.use("/api/categories", categoryRoutes);
 module.exports = app;
