@@ -1,0 +1,354 @@
+
+const pool = require("../config/database");
+const orderModel = require("../models/orderModel");
+
+// Tạo thông báo lỗi
+function createError(message, statusCode = 400) {
+    const error = new Error(message);
+    error.statusCode = statusCode;
+    return error;
+}
+
+// Kiểm tra ID
+function validateId(value) {
+    const id = Number(value);
+
+    if (!Number.isSafeInteger(id) || id <= 0) {
+        throw createError("ID không hợp lệ");
+    }
+
+    return id;
+}
+
+// Chuyển giá DECIMAL sang đơn vị nhỏ nhất để tính chính xác
+function toCents(value) {
+    const str = String(value);
+
+    if (!/^\d{1,13}(\.\d{1,2})?$/.test(str)) {
+        throw createError("Giá sản phẩm không hợp lệ");
+    }
+
+    const [whole, decimal = ""] = str.split(".");
+
+    return BigInt(whole) * 100n +
+        BigInt(decimal.padEnd(2, "0"));
+}
+
+// Chuyển đơn vị nhỏ nhất thành chuỗi DECIMAL
+function fromCents(value) {
+    return `${value / 100n}.${String(value % 100n).padStart(2, "0")}`;
+}
+
+// 1. Tạo đơn hàng từ giỏ
+async function createOrder(userId, data) {
+    const validUserId = validateId(userId);
+
+    if (!data || typeof data !== "object" || Array.isArray(data)) {
+        throw createError("Thông tin đặt hàng không hợp lệ");
+    }
+
+    const {
+        receiver_name,
+        receiver_phone,
+        shipping_address
+    } = data;
+
+    if (
+        typeof receiver_name !== "string" ||
+        !receiver_name.trim() ||
+        receiver_name.trim().length > 120
+    ) {
+        throw createError("Tên người nhận không hợp lệ");
+    }
+
+    if (
+        typeof receiver_phone !== "string" ||
+        !/^[0-9+().\s-]{9,20}$/.test(receiver_phone.trim())
+    ) {
+        throw createError("Số điện thoại không hợp lệ");
+    }
+
+    if (
+        typeof shipping_address !== "string" ||
+        shipping_address.trim().length < 5 ||
+        shipping_address.trim().length > 1000
+    ) {
+        throw createError("Địa chỉ giao hàng không hợp lệ");
+    }
+
+    const connection = await pool.getConnection();
+
+    let orderId;
+
+    try {
+        // Bắt đầu transaction
+        await connection.beginTransaction();
+
+        // Tìm và khóa giỏ hàng
+        const cart = await orderModel.findCartForUpdate(
+            connection,
+            validUserId
+        );
+
+        if (!cart) {
+            throw createError("Giỏ hàng chưa có sản phẩm");
+        }
+
+        // Lấy danh sách sản phẩm trong giỏ
+        const cartItems = await orderModel.getCartItemsForUpdate(
+            connection,
+            cart.id
+        );
+
+        if (cartItems.length === 0) {
+            throw createError("Giỏ hàng đang trống");
+        }
+
+        const orderItems = [];
+        let totalCents = 0n;
+
+        // Kiểm tra từng sản phẩm
+        for (const item of cartItems) {
+            const product = await orderModel.getProductForUpdate(
+                connection,
+                item.product_id
+            );
+
+            if (!product || Number(product.is_active) !== 1) {
+                throw createError(
+                    "Có sản phẩm không còn được bán"
+                );
+            }
+
+            const quantity = Number(item.quantity);
+
+            if (
+                !Number.isSafeInteger(quantity) ||
+                quantity <= 0 ||
+                quantity > Number(product.stock)
+            ) {
+                throw createError(
+                    `Sản phẩm ${product.name} không đủ tồn kho`
+                );
+            }
+
+            const unitCents = toCents(product.price);
+
+            if (unitCents <= 0n) {
+                throw createError(
+                    `Giá sản phẩm ${product.name} không hợp lệ`
+                );
+            }
+
+            const subtotalCents = unitCents * BigInt(quantity);
+
+            totalCents += subtotalCents;
+
+            if (totalCents > 999999999999999n) {
+                throw createError("Tổng tiền vượt giới hạn cho phép");
+            }
+
+            orderItems.push({
+                productId: product.id,
+                productName: product.name,
+                quantity,
+                unitPrice: fromCents(unitCents),
+                subtotal: fromCents(subtotalCents)
+            });
+        }
+
+        // Tạo đơn hàng
+        orderId = await orderModel.createOrder(connection, {
+            userId: validUserId,
+            receiverName: receiver_name.trim(),
+            receiverPhone: receiver_phone.trim(),
+            shippingAddress: shipping_address.trim(),
+            totalAmount: fromCents(totalCents)
+        });
+
+        // Lưu chi tiết đơn và trừ tồn kho
+        for (const item of orderItems) {
+            await orderModel.createOrderItem(connection, {
+                orderId,
+                ...item
+            });
+
+            const decreased = await orderModel.decreaseStock(
+                connection,
+                item.productId,
+                item.quantity
+            );
+
+            if (!decreased) {
+                throw createError(
+                    `Không thể trừ tồn kho sản phẩm ${item.productName}`
+                );
+            }
+        }
+
+        // Xóa sản phẩm khỏi giỏ sau khi đặt hàng
+        await orderModel.clearCart(connection, cart.id);
+
+        // Hoàn tất transaction
+        await connection.commit();
+
+    } catch (error) {
+        await connection.rollback();
+        throw error;
+    } finally {
+        connection.release();
+    }
+
+    // Trả về đơn hàng đã tạo
+    const order = await orderModel.getOrderById(orderId);
+    const items = await orderModel.getOrderItems(orderId);
+
+    return {
+        ...order,
+        items
+    };
+}
+
+// 2. Khách hàng xem lịch sử đơn hàng
+async function getMyOrders(userId) {
+    return orderModel.getOrdersByUserId(validateId(userId));
+}
+
+// 3. Xem chi tiết đơn hàng
+async function getOrderDetail(orderId, user) {
+    const validId = validateId(orderId);
+
+    const order = await orderModel.getOrderById(validId);
+
+    if (!order) {
+        throw createError("Không tìm thấy đơn hàng", 404);
+    }
+
+    // Chỉ chủ đơn hàng hoặc Admin được xem
+    if (
+        order.user_id !== user.id &&
+        user.role !== "admin"
+    ) {
+        throw createError("Không tìm thấy đơn hàng", 404);
+    }
+
+    const items = await orderModel.getOrderItems(validId);
+
+    return {
+        ...order,
+        items
+    };
+}
+
+// 4. Admin xem tất cả đơn hàng
+async function getAllOrders() {
+    return orderModel.getAllOrders();
+}
+
+
+async function updateOrderStatus(orderId, data) {
+    const validOrderId = validateId(orderId);
+    const newStatus = data?.status;
+
+    // Các trạng thái được phép chuyển tiếp
+    const allowedTransitions = {
+        pending: ["confirmed", "cancelled"],
+        confirmed: ["shipping", "cancelled"],
+        shipping: ["delivered"],
+        delivered: [],
+        cancelled: []
+    };
+
+    if (
+        typeof newStatus !== "string" ||
+        !Object.prototype.hasOwnProperty.call(
+            allowedTransitions,
+            newStatus
+        )
+    ) {
+        throw createError("Trạng thái đơn hàng không hợp lệ");
+    }
+
+    const connection = await pool.getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        // Khóa đơn hàng trước khi cập nhật
+        const order = await orderModel.getOrderForUpdate(
+            connection,
+            validOrderId
+        );
+
+        if (!order) {
+            throw createError("Không tìm thấy đơn hàng", 404);
+        }
+
+        // Không cho phép chuyển trạng thái sai quy trình
+        if (
+            !allowedTransitions[order.status].includes(newStatus)
+        ) {
+            throw createError(
+                `Không thể chuyển từ ${order.status} sang ${newStatus}`,
+                409
+            );
+        }
+
+        // Nếu hủy đơn: hoàn trả tồn kho
+        if (newStatus === "cancelled") {
+            const items = await orderModel.getOrderItemsForUpdate(
+                connection,
+                validOrderId
+            );
+
+            for (const item of items) {
+                await orderModel.restoreStock(
+                    connection,
+                    item.product_id,
+                    item.quantity
+                );
+            }
+        }
+
+        // Với COD, đánh dấu đã thanh toán khi giao thành công
+        const paymentStatus = newStatus === "delivered"
+            ? "paid"
+            : order.payment_status;
+
+        await orderModel.updateOrderStatus(
+            connection,
+            validOrderId,
+            newStatus,
+            paymentStatus
+        );
+
+        await connection.commit();
+    } catch (error) {
+        await connection.rollback();
+        throw error;
+    } finally {
+        connection.release();
+    }
+
+    const updatedOrder = await orderModel.getOrderById(
+        validOrderId
+    );
+
+    const items = await orderModel.getOrderItems(
+        validOrderId
+    );
+
+    return {
+        ...updatedOrder,
+        items
+    };
+}
+
+
+module.exports = {
+    createOrder,
+    getMyOrders,
+    getOrderDetail,
+    getAllOrders,
+    updateOrderStatus
+};

@@ -21,10 +21,22 @@ success: true,
 message: "API is healthy"
 });
 });
-const productRoutes = require("./routes/productRoutes");
+const authRoutes = require("./routes/authRoutes");
+app.use("/api/auth", authRoutes);
 
+const productRoutes = require("./routes/productRoutes");
 app.use("/api/products", productRoutes);
 
 const categoryRoutes = require("./routes/categoryRoutes");
 app.use("/api/categories", categoryRoutes);
+
+const cartRoutes = require("./routes/cartRoutes");
+app.use("/api/cart", cartRoutes);
+
+const orderRoutes = require("./routes/orderRoutes");
+app.use("/api/orders", orderRoutes);
+
+const errorMiddleware = require("./middlewares/errorMiddleware");
+app.use(errorMiddleware);
+
 module.exports = app;
