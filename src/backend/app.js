@@ -36,6 +36,9 @@ app.use("/api/cart", cartRoutes);
 const orderRoutes = require("./routes/orderRoutes");
 app.use("/api/orders", orderRoutes);
 
+const chatbotRoutes = require("./routes/chatbotRoutes");
+app.use("/api/chatbot", chatbotRoutes);
+
 const errorMiddleware = require("./middlewares/errorMiddleware");
 app.use(errorMiddleware);
 
