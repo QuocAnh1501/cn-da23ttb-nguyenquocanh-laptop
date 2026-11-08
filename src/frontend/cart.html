@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Giỏ hàng - Laptop Store</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script src="assets/js/layout.js" defer></script>
+    <script src="assets/js/cart.js" defer></script>
+</head>
+<body>
+
+    <div id="site-header"></div>
+
+    <main class="container cart-page">
+        <a href="index.html#products" class="back-link">
+            ← Tiếp tục mua sắm
+        </a>
+
+        <h1>🛒 Giỏ hàng của tôi</h1>
+
+        <p id="cartStatus"
+           role="status"
+           aria-live="polite">
+            Đang tải giỏ hàng...
+        </p>
+
+        <div class="cart-layout">
+
+            <!-- Danh sách laptop trong giỏ -->
+            <section
+                id="cartItems"
+                class="cart-items"
+                aria-label="Sản phẩm trong giỏ hàng">
+            </section>
+
+            <!-- Tổng kết giỏ hàng -->
+            <aside id="cartSummary"
+                   class="cart-summary"
+                   hidden>
+
+                <h2>Thông tin giỏ hàng</h2>
+
+                <div class="cart-summary-row">
+                    <span>Tổng số lượng</span>
+                    <strong id="totalQuantity">0</strong>
+                </div>
+
+                <div class="cart-summary-row">
+                    <span>Tổng tiền</span>
+                    <strong id="cartTotal">0đ</strong>
+                </div>
+
+                <p class="cart-summary-note">
+                    Tổng tiền được tính từ giá sản phẩm
+                    hiện tại trong cửa hàng.
+                </p>
+                <a href="checkout.html" class="btn-primary checkout-button">
+                    Tiến hành đặt hàng
+                </a>
+                <button
+                    type="button"
+                    id="clearCartButton"
+                    class="cart-clear-button">
+                    Xóa toàn bộ giỏ hàng
+                </button>
+
+            </aside>
+        </div>
+    </main>
+
+    <div id="site-footer"></div>
+
+</body>
+</html>

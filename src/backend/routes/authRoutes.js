@@ -10,5 +10,5 @@ router.post("/login", authController.login);
 
 // Phải đăng nhập mới truy cập được
 router.get("/me", authenticate, authController.me);
-
+router.put("/me", authenticate, authController.updateMe);
 module.exports = router;

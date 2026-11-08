@@ -1,0 +1,47 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Đơn hàng của tôi - Laptop Store</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script src="assets/js/layout.js" defer></script>
+    <script src="assets/js/orders.js" defer></script>
+</head>
+<body>
+
+    <!-- Header dùng chung -->
+    <div id="site-header"></div>
+
+    <main class="container orders-page">
+        <a href="index.html#products" class="back-link">
+            ← Tiếp tục mua sắm
+        </a>
+
+        <div class="orders-title">
+            <h1>📦 Đơn hàng của tôi</h1>
+            <p>
+                Theo dõi trạng thái và xem lại
+                các đơn hàng đã đặt.
+            </p>
+        </div>
+
+        <p id="ordersStatus"
+           role="status"
+           aria-live="polite">
+            Đang tải đơn hàng...
+        </p>
+
+        <div id="ordersList" class="orders-list"></div>
+    </main>
+
+    <!-- Footer dùng chung -->
+    <div id="site-footer"></div>
+
+</body>
+</html>

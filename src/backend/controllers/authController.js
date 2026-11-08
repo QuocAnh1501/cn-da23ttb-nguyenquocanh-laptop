@@ -40,8 +40,27 @@ async function me(req, res) {
 }
 
 
+    async function updateMe(req, res, next) {
+        try {
+            const user = await authService.updateProfile(
+                req.user.id,
+                req.body
+            );
+
+            return res.status(200).json({
+                success: true,
+                message: "Cập nhật thông tin thành công",
+                data: user
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+
 module.exports = {
     register,
     login,
-    me
+    me,
+    updateMe
 };

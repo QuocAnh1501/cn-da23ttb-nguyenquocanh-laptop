@@ -87,11 +87,41 @@ async function updateOrderStatus(req, res, next) {
     }
 }
 
+const paymentService = require("../services/paymentService");
+
+async function getOrderPayment(req, res, next) {
+    try {
+        // Hàm này đã kiểm tra chủ đơn hàng hoặc Admin
+        const order = await orderService.getOrderDetail(
+            req.params.id,
+            req.user
+        );
+
+        if (order.payment_method !== "bank_transfer") {
+            const error = new Error(
+                "Đơn hàng không sử dụng chuyển khoản"
+            );
+            error.statusCode = 400;
+            throw error;
+        }
+
+        const payment = paymentService.getBankTransferInfo(order);
+
+        return res.status(200).json({
+            success: true,
+            message: "Lấy thông tin thanh toán thành công",
+            data: payment
+        });
+    } catch (error) {
+        next(error);
+    }
+}
 
 module.exports = {
     createOrder,
     getMyOrders,
     getOrderDetail,
     getAllOrders,
-    updateOrderStatus
+    updateOrderStatus,
+    getOrderPayment
 };

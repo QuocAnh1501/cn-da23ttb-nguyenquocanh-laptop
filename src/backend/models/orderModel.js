@@ -42,26 +42,29 @@ async function getProductForUpdate(connection, productId) {
 }
 
 // 4. Tạo đơn hàng
+
 async function createOrder(connection, order) {
     const {
         userId,
         receiverName,
         receiverPhone,
         shippingAddress,
-        totalAmount
+        totalAmount,
+        paymentMethod
     } = order;
 
     const [result] = await connection.query(
         `INSERT INTO orders
          (user_id, receiver_name, receiver_phone,
-          shipping_address, total_amount)
-         VALUES (?, ?, ?, ?, ?)`,
+          shipping_address, total_amount, payment_method)
+         VALUES (?, ?, ?, ?, ?, ?)`,
         [
             userId,
             receiverName,
             receiverPhone,
             shippingAddress,
-            totalAmount
+            totalAmount,
+            paymentMethod
         ]
     );
 

@@ -55,8 +55,26 @@ async function createUser(user) {
     return findById(result.insertId);
 }
 
+
+    async function updateProfile(userId, profile) {
+        const { full_name, phone, address } = profile;
+
+        await pool.query(
+            `UPDATE users
+            SET full_name = ?,
+                phone = ?,
+                address = ?
+            WHERE id = ? AND is_active = 1`,
+            [full_name, phone, address, userId]
+        );
+
+        return findById(userId);
+    }
+
+
 module.exports = {
     findByEmail,
     findById,
-    createUser
+    createUser,
+    updateProfile
 };

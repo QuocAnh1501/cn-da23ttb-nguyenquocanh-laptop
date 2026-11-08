@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Thông tin cá nhân - Laptop Store</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/profile.js" defer></script>
+</head>
+
+<body>
+     <!-- HEADER -->
+   <div id="site-header"></div>
+
+    <main class="auth-section">
+        <section class="auth-card profile-card">
+            <h1>Thông tin cá nhân</h1>
+            <p>
+                Lưu thông tin để điền nhanh khi đặt hàng.
+            </p>
+
+            <form id="profileForm">
+                <label for="fullName">Họ và tên</label>
+                <input
+                    id="fullName"
+                    type="text"
+                    maxlength="120"
+                    autocomplete="name"
+                    required
+                >
+
+                <label for="email">Email</label>
+                <input
+                    id="email"
+                    type="email"
+                    readonly
+                >
+
+                <label for="phone">Số điện thoại nhận hàng</label>
+                <input
+                    id="phone"
+                    type="tel"
+                    maxlength="20"
+                    autocomplete="tel"
+                    placeholder="Nhập số điện thoại"
+                    required
+                >
+
+                <label for="address">Địa chỉ giao hàng mặc định</label>
+                <textarea
+                    id="address"
+                    rows="4"
+                    maxlength="1000"
+                    autocomplete="street-address"
+                    placeholder="Số nhà, đường, phường/xã, tỉnh/thành phố..."
+                    required
+                ></textarea>
+
+                <button
+                    id="saveButton"
+                    type="submit"
+                    class="btn-primary auth-button"
+                >
+                    Lưu thông tin
+                </button>
+
+                <p id="profileMessage"
+                   role="status"
+                   aria-live="polite"></p>
+            </form>
+
+            <button type="button"
+                    id="logoutButton"
+                    class="logout-button">
+                Đăng xuất
+            </button>
+
+            <a href="index.html" class="auth-back">
+                ← Quay lại trang chủ
+            </a>
+        </section>
+    </main>
+</body>
+</html>

@@ -47,11 +47,16 @@ async function createOrder(userId, data) {
         throw createError("Thông tin đặt hàng không hợp lệ");
     }
 
-    const {
+        const {
         receiver_name,
         receiver_phone,
-        shipping_address
+        shipping_address,
+        payment_method = "cod"
     } = data;
+
+    if (!["cod", "bank_transfer"].includes(payment_method)) {
+        throw createError("Phương thức thanh toán không hợp lệ");
+    }
 
     if (
         typeof receiver_name !== "string" ||
@@ -163,7 +168,8 @@ async function createOrder(userId, data) {
             receiverName: receiver_name.trim(),
             receiverPhone: receiver_phone.trim(),
             shippingAddress: shipping_address.trim(),
-            totalAmount: fromCents(totalCents)
+            totalAmount: fromCents(totalCents),
+            paymentMethod: payment_method
         });
 
         // Lưu chi tiết đơn và trừ tồn kho
@@ -310,10 +316,13 @@ async function updateOrderStatus(orderId, data) {
             }
         }
 
-        // Với COD, đánh dấu đã thanh toán khi giao thành công
-        const paymentStatus = newStatus === "delivered"
-            ? "paid"
-            : order.payment_status;
+
+        // Chỉ tự đánh dấu đã thanh toán khi giao thành công đơn COD
+        const paymentStatus =
+            newStatus === "delivered" &&
+            order.payment_method === "cod"
+                ? "paid"
+                : order.payment_status;
 
         await orderModel.updateOrderStatus(
             connection,

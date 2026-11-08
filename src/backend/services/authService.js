@@ -144,7 +144,47 @@ async function login(data) {
 }
 
 
+async function updateProfile(userId, data) {
+    if (!data || typeof data !== "object" ||
+        Array.isArray(data)) {
+        throw createError("Dữ liệu không hợp lệ");
+    }
+
+    const { full_name, phone, address } = data;
+
+    if (
+        typeof full_name !== "string" ||
+        !full_name.trim() ||
+        full_name.trim().length > 120
+    ) {
+        throw createError("Họ tên không hợp lệ");
+    }
+
+    if (
+        typeof phone !== "string" ||
+        !/^[0-9+().\s-]{9,20}$/.test(phone.trim())
+    ) {
+        throw createError("Số điện thoại không hợp lệ");
+    }
+
+    if (
+        typeof address !== "string" ||
+        address.trim().length < 5 ||
+        address.trim().length > 1000
+    ) {
+        throw createError("Địa chỉ giao hàng không hợp lệ");
+    }
+
+    return userModel.updateProfile(userId, {
+        full_name: full_name.trim(),
+        phone: phone.trim(),
+        address: address.trim()
+    });
+}
+
+
 module.exports = {
     register,
-    login
+    login,
+    updateProfile
 };

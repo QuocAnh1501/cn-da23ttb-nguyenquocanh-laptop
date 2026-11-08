@@ -1,0 +1,88 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Laptop Store - Laptop chính hãng</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/main.js" defer></script>
+    <script src="assets/js/header-auth.js" defer></script>
+    <script src="assets/js/layout.js" defer></script>
+</head>
+
+<body>
+
+    <!-- HEADER -->
+   <div id="site-header"></div>
+
+    <!-- BANNER -->
+    <section class="hero">
+        <div class="container hero-content">
+            <div>
+                <span class="eyebrow">
+                    LAPTOP CHO MỌI NHU CẦU
+                </span>
+
+                <h1>
+                    Tìm chiếc laptop
+                    <span>phù hợp với bạn</span>
+                </h1>
+
+                <p>
+                    Khám phá laptop dành cho học tập,
+                    lập trình, làm việc và giải trí.
+                    Hỗ trợ tư vấn sản phẩm bằng AI.
+                </p>
+
+                <a href="#products" class="btn-primary">
+                    Khám phá sản phẩm
+                </a>
+            </div>
+
+            <div class="hero-image" aria-hidden="true">
+                💻
+            </div>
+        </div>
+    </section>
+
+    <!-- PRODUCT LIST -->
+    <section class="products-section" id="products">
+        <div class="container">
+
+            <div class="section-heading">
+                <div>
+                    <span class="eyebrow">
+                        SẢN PHẨM CỬA HÀNG
+                    </span>
+                    <h2>Danh sách laptop</h2>
+                </div>
+
+                <input
+                    type="search"
+                    id="searchInput"
+                    class="search-input"
+                    placeholder="Tìm laptop theo tên, hãng..."
+                    aria-label="Tìm kiếm laptop"
+                >
+            </div>
+
+            <p id="productStatus" class="status-message">
+                Đang tải sản phẩm...
+            </p>
+
+            <div id="productList" class="product-grid">
+                <!-- JavaScript hiển thị laptop từ API -->
+            </div>
+
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+   <div id="site-footer"></div>
+
+</body>
+</html>

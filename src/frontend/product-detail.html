@@ -1,0 +1,80 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Chi tiết laptop - Laptop Store</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+    <script src="assets/js/product-detail.js" defer></script>
+    <script src="assets/js/layout.js" defer></script>
+</head>
+
+<body>
+    <!-- HEADER -->
+    <div id="site-header"></div>
+
+    <main class="container details-section">
+        <a href="index.html#products" class="back-link">
+            ← Quay lại danh sách sản phẩm
+        </a>
+
+        <p id="detailsStatus">Đang tải thông tin laptop...</p>
+
+        <section id="detailsContent" class="details-grid" hidden>
+
+            <div class="details-image">
+                <img id="detailsImage" alt="Ảnh laptop" hidden>
+                <span id="detailsPlaceholder">💻</span>
+            </div>
+
+            <div class="details-info">
+                <span class="eyebrow">THÔNG TIN SẢN PHẨM</span>
+
+                <h1 id="detailsName"></h1>
+
+                <p id="detailsBrand"></p>
+
+                <p id="detailsPrice" class="product-price"></p>
+
+                <p id="detailsStock" class="product-stock"></p>
+
+                <!-- THÊM VÀO GIỎ HÀNG -->
+                <div class="cart-actions">
+                    <button
+                        type="button"
+                        id="addToCartButton"
+                        class="btn-primary"
+                        hidden
+                    >
+                        🛒 Thêm vào giỏ hàng
+                    </button>
+
+                    <p id="cartMessage"
+                    role="status"
+                    aria-live="polite"></p>
+                </div>
+
+                <h2>Thông số kỹ thuật</h2>
+
+                <div class="spec-list">
+                    <p><strong>CPU:</strong> <span id="detailsCpu"></span></p>
+                    <p><strong>RAM:</strong> <span id="detailsRam"></span></p>
+                    <p><strong>Ổ cứng:</strong> <span id="detailsStorage"></span></p>
+                    <p><strong>GPU:</strong> <span id="detailsGpu"></span></p>
+                    <p><strong>Màn hình:</strong> <span id="detailsScreen"></span></p>
+                </div>
+
+                <h2>Mô tả sản phẩm</h2>
+                <p id="detailsDescription"></p>
+            </div>
+        </section>
+    </main>
+
+    <!-- FOOTER -->
+   <div id="site-footer"></div>
+</body>
+</html>

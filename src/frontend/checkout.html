@@ -1,0 +1,181 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Thanh toán - Laptop Store</title>
+
+    <link rel="stylesheet" href="assets/css/style.css">
+
+    <script src="assets/js/layout.js" defer></script>
+    <script src="assets/js/checkout.js" defer></script>
+</head>
+<body>
+
+    <div id="site-header"></div>
+
+    <main class="container checkout-page">
+        <a href="cart.html" class="back-link">
+            ← Quay lại giỏ hàng
+        </a>
+
+        <h1>Thanh toán đơn hàng</h1>
+
+        <p id="checkoutStatus"
+           role="status"
+           aria-live="polite">
+            Đang tải thông tin...
+        </p>
+
+        <div id="checkoutContent" class="checkout-layout" hidden>
+
+            <section class="checkout-card">
+                <h2>Thông tin nhận hàng</h2>
+
+                <p class="checkout-hint">
+                    Thông tin được tự động lấy từ tài khoản.
+                    Bạn có thể chỉnh sửa cho đơn hàng này.
+                </p>
+
+                <form id="checkoutForm">
+
+                    <label for="receiver_name">
+                        Họ tên người nhận
+                    </label>
+                    <input
+                        type="text"
+                        id="receiver_name"
+                        maxlength="120"
+                        autocomplete="name"
+                        required
+                    >
+
+                    <label for="receiver_phone">
+                        Số điện thoại
+                    </label>
+                    <input
+                        type="tel"
+                        id="receiver_phone"
+                        minlength="9"
+                        maxlength="20"
+                        autocomplete="tel"
+                        required
+                    >
+
+                    <label for="shipping_address">
+                        Địa chỉ giao hàng
+                    </label>
+                    <textarea
+                        id="shipping_address"
+                        rows="4"
+                        minlength="5"
+                        maxlength="1000"
+                        autocomplete="street-address"
+                        required
+                    ></textarea>
+
+                    <a href="profile.html" class="profile-edit-link">
+                        Cập nhật thông tin mặc định
+                    </a>
+
+                    <h3>Phương thức thanh toán</h3>
+                        <div class="payment-options">
+                            <label>
+                                <input type="radio"
+                                    name="payment_method"
+                                    value="cod"
+                                    checked>
+                                🚚 Thanh toán khi nhận hàng (COD)
+                            </label>
+
+                            <label>
+                                <input type="radio"
+                                    name="payment_method"
+                                    value="bank_transfer">
+                                🏦 Chuyển khoản ngân hàng bằng VietQR
+                            </label>
+                        </div>
+
+                    <button
+                        id="placeOrderButton"
+                        type="submit"
+                        class="btn-primary checkout-submit">
+                        Xác nhận đặt hàng
+                    </button>
+
+                </form>
+            </section>
+
+            <aside class="checkout-card">
+                <h2>Đơn hàng của bạn</h2>
+
+                <div id="checkoutItems"></div>
+
+                <div class="checkout-total">
+                    <span>Tổng cộng</span>
+                    <strong id="checkoutTotal">0đ</strong>
+                </div>
+
+                <p class="checkout-hint">
+                </p>
+            </aside>
+
+        </div>
+
+
+                <section id="orderSuccess"
+                        class="order-success"
+                        hidden>
+
+                    <h2>✅ Đặt hàng thành công!</h2>
+
+                    <p id="orderSuccessText"></p>
+
+                    <!-- Hiển thị khi khách chọn chuyển khoản -->
+                    <div id="bankTransferBox" hidden>
+
+                        <h3>🏦 Thanh toán bằng VietQR</h3>
+
+                        <p>
+                            Quét mã QR bằng ứng dụng ngân hàng
+                            để thanh toán đơn hàng.
+                        </p>
+
+                        <img
+                            id="paymentQrImage"
+                            alt="Mã VietQR của đơn hàng"
+                            width="280"
+                        >
+
+                        <p id="paymentTransferNote"></p>
+
+                        <p id="paymentQrMessage"
+                        role="status"></p>
+
+                        <p>
+                            Sau khi chuyển khoản, đơn hàng sẽ
+                            chờ xác nhận thanh toán.
+                        </p>
+
+                    </div>
+
+                    <div class="order-success-actions">
+                        <a href="orders.html" class="btn-primary">
+                            📦 Xem đơn hàng của tôi
+                        </a>
+
+                        <a href="index.html#products" class="btn-primary">
+                            Tiếp tục mua sắm
+                        </a>
+                    </div>
+
+                </section>
+    </main>
+
+    <div id="site-footer"></div>
+
+</body>
+</html>

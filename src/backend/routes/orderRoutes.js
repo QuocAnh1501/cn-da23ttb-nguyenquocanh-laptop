@@ -33,5 +33,5 @@ router.patch(
 
 // Chủ đơn hàng hoặc Admin xem chi tiết
 router.get("/:id", orderController.getOrderDetail);
-
+router.get("/:id/payment", orderController.getOrderPayment);
 module.exports = router;

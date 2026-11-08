@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý sản phẩm - Laptop Store Admin</title>
+
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <script src="../assets/js/admin/products.js" defer></script>
+</head>
+<body>
+
+    <div id="adminStatus" class="admin-status"
+         role="status" aria-live="polite">
+        Đang kiểm tra quyền quản trị...
+    </div>
+
+    <div id="adminApp" class="admin-layout" hidden>
+
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar">
+            <a href="products.html" class="admin-logo">
+                💻 Laptop Store
+                <small>ADMIN PANEL</small>
+            </a>
+
+            <nav class="admin-menu">
+                <a href="products.html" class="active">
+                    📦 Quản lý sản phẩm
+                </a>
+
+                <a href="../index.html">
+                    🏠 Xem cửa hàng
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <span id="adminName"></span>
+
+                <button type="button" id="adminLogout">
+                    Đăng xuất
+                </button>
+            </div>
+        </aside>
+
+        <!-- NỘI DUNG QUẢN TRỊ -->
+        <div class="admin-main">
+
+            <header class="admin-topbar">
+                <div>
+                    <span>HỆ THỐNG QUẢN TRỊ</span>
+                    <h2>Quản lý sản phẩm</h2>
+                </div>
+
+                <div class="admin-avatar">👤 Admin</div>
+            </header>
+
+            <main class="admin-content">
+
+                <div class="admin-page-title">
+                    <div>
+                        <h1>Danh sách laptop</h1>
+                        <p>
+                            Theo dõi sản phẩm, giá bán
+                            và số lượng tồn kho.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- THỐNG KÊ -->
+                <section class="admin-stats">
+                    <div class="stat-card">
+                        <span>Tổng sản phẩm đang bán</span>
+                        <strong id="totalProducts">0</strong>
+                    </div>
+
+                    <div class="stat-card">
+                        <span>Sản phẩm hết hàng</span>
+                        <strong id="outOfStock">0</strong>
+                    </div>
+                </section>
+
+                <!-- DANH SÁCH SẢN PHẨM -->
+                <section class="admin-panel">
+
+                    <div class="panel-heading">
+                        <h2>Danh sách sản phẩm</h2>
+
+                        <input
+                            type="search"
+                            id="adminProductSearch"
+                            placeholder="Tìm theo tên, thương hiệu..."
+                            aria-label="Tìm kiếm sản phẩm"
+                        >
+                    </div>
+
+                    <p id="productsStatus" role="status">
+                        Đang tải sản phẩm...
+                    </p>
+
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Sản phẩm</th>
+                                    <th>Giá bán</th>
+                                    <th>Tồn kho</th>
+                                    <th>Trạng thái</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="adminProductList">
+                            </tbody>
+                        </table>
+                    </div>
+
+                </section>
+
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>
