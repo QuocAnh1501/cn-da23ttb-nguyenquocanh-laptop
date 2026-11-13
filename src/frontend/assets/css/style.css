@@ -1231,3 +1231,80 @@ a {
         margin-top: 12px;
     }
 }
+
+/* NÚT VÀO TRANG QUẢN TRỊ */
+
+.admin-panel-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 9px 14px;
+    background: #2563eb;
+    color: #ffffff;
+    border-radius: 9px;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    transition: background 0.2s;
+}
+
+.admin-panel-link:hover {
+    background: #1d4ed8;
+    color: #ffffff;
+}
+
+#adminPanelLink[hidden] {
+    display: none !important;
+}
+
+/* NAVBAR - CĂN CHỈNH MỘT HÀNG TRÊN DESKTOP */
+
+@media (min-width: 1100px) {
+    #site-header .header-content {
+        width: calc(100% - 40px);
+        max-width: 1440px;
+        margin: 0 auto;
+        gap: 18px;
+    }
+
+    #site-header .logo {
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-size: 20px;
+    }
+
+    #site-header .navigation {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        flex-wrap: nowrap;
+        min-width: 0;
+    }
+
+    #site-header .navigation > a {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    #site-header .header-account-actions {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        flex-wrap: nowrap;
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+
+    #site-header .header-label {
+        white-space: nowrap;
+        flex-shrink: 0;
+        font-size: 13px;
+    }
+}
+
+/* Đảm bảo các phần tử hidden không chiếm chỗ */
+#site-header #loginLink[hidden],
+#site-header #accountLink[hidden],
+#site-header #adminPanelLink[hidden] {
+    display: none !important;
+}

@@ -74,8 +74,6 @@ loginForm.addEventListener("submit", async (event) => {
             }
         }
 
-window.location.assign(destination);
-
         window.location.assign(destination);
 
     } catch (error) {

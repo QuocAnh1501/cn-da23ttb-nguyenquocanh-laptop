@@ -50,6 +50,13 @@ async function updateHeaderAccount() {
         const result = await response.json();
         const user = result.data;
 
+        // Hiển thị nút quản lý nếu người dùng là Admin
+        const adminPanelLink =
+            document.getElementById("adminPanelLink");
+
+        if (adminPanelLink) {
+            adminPanelLink.hidden = user?.role !== "admin";
+}
 
         if (user?.full_name) {
             const loginLink = document.getElementById("loginLink");
