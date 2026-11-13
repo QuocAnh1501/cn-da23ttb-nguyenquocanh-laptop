@@ -24,6 +24,13 @@ router.get(
     authorizeAdmin,
     orderController.getAllOrders
 );
+
+// Chỉ Admin được xác nhận đã nhận tiền
+router.patch(
+    "/:id/payment/confirm",
+    authorizeAdmin,
+    orderController.confirmBankTransfer
+);
 // Chỉ Admin được cập nhật trạng thái đơn hàng
 router.patch(
     "/:id/status",

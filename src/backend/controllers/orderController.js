@@ -117,11 +117,30 @@ async function getOrderPayment(req, res, next) {
     }
 }
 
+async function confirmBankTransfer(req, res, next) {
+    try {
+        const order =
+            await orderService.confirmBankTransferPayment(
+                req.params.id,
+                req.body
+            );
+
+        return res.status(200).json({
+            success: true,
+            message: "Đã xác nhận nhận tiền chuyển khoản",
+            data: order
+        });
+    } catch (error) {
+        next(error);
+    }
+}
+
 module.exports = {
     createOrder,
     getMyOrders,
     getOrderDetail,
     getAllOrders,
     updateOrderStatus,
-    getOrderPayment
+    getOrderPayment,
+    confirmBankTransfer
 };

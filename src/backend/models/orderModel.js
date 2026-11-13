@@ -226,6 +226,20 @@ async function getOrderItemsForUpdate(connection, orderId) {
 }
 
 
+async function markBankTransferPaid(connection, orderId) {
+    const [result] = await connection.query(
+        `UPDATE orders
+         SET payment_status = 'paid'
+         WHERE id = ?
+           AND payment_method = 'bank_transfer'
+           AND payment_status = 'unpaid'
+           AND status <> 'cancelled'`,
+        [orderId]
+    );
+
+    return result.affectedRows === 1;
+}
+
 module.exports = {
     findCartForUpdate,
     getCartItemsForUpdate,
@@ -241,5 +255,6 @@ module.exports = {
     getOrderForUpdate,
     updateOrderStatus,
     restoreStock,
-    getOrderItemsForUpdate
+    getOrderItemsForUpdate,
+    markBankTransferPaid
 };

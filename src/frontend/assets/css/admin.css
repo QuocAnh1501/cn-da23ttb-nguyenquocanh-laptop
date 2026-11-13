@@ -317,3 +317,142 @@ button, input {
         grid-template-columns: 1fr;
     }
 }
+
+
+.admin-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.admin-primary-btn,
+.admin-action-edit,
+.admin-action-delete {
+    display: inline-block;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    cursor: pointer;
+    border: none;
+}
+
+.admin-primary-btn {
+    background: #2563eb;
+    color: white;
+}
+
+.admin-action-edit {
+    background: #dbeafe;
+    color: #1d4ed8;
+}
+
+.admin-action-delete {
+    background: #fee2e2;
+    color: #dc2626;
+}
+
+.admin-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.admin-orders-actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    min-width: 240px;
+}
+
+.admin-orders-btn {
+    border: 1px solid #bfdbfe;
+    border-radius: 8px;
+    background: #eff6ff;
+    color: #1d4ed8;
+    padding: 9px 12px;
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.admin-orders-btn:hover {
+    background: #dbeafe;
+}
+
+.admin-orders-btn:disabled {
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.payment-confirm {
+    background: #dcfce7;
+    color: #166534;
+    border-color: #bbf7d0;
+}
+
+.payment-confirm:hover {
+    background: #bbf7d0;
+}
+
+.cancel-order {
+    background: #fee2e2;
+    color: #b91c1c;
+    border-color: #fecaca;
+}
+
+.cancel-order:hover {
+    background: #fecaca;
+}
+
+.admin-order-detail {
+    background: #f8fafc;
+    padding: 18px 24px !important;
+}
+
+.admin-order-detail p {
+    margin-bottom: 8px;
+}
+
+.admin-table th,
+.admin-table td {
+    vertical-align: middle;
+}
+
+.admin-table tr[hidden] {
+    display: none;
+}
+
+.admin-status[hidden] {
+    display: none;
+}
+/* Bo sung cho form CRUD san pham */
+.admin-primary-btn,.admin-secondary-btn,.admin-action-edit,.admin-action-delete {display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:10px 14px;font-weight:600;border:0;border-radius:8px;cursor:pointer;text-decoration:none}
+.admin-primary-btn {color:#fff;background:#2563eb}
+.admin-primary-btn:hover {background:#1d4ed8}
+.admin-secondary-btn {color:#334155;background:#e2e8f0}
+.admin-action-edit {color:#1d4ed8;background:#dbeafe;padding:7px 10px}
+.admin-action-delete {color:#991b1b;background:#fee2e2;padding:7px 10px}
+.admin-actions {display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.admin-form-page {max-width:1040px;padding:36px 20px 80px;margin:auto}
+.admin-form-page[hidden] {display:none}
+.admin-back {color:#2563eb;display:inline-block;margin-bottom:18px;font-weight:600}
+.admin-form-card {background:#fff;padding:30px;border:1px solid #e2e8f0;border-radius:14px}
+.admin-form-card h1 {font-size:28px;margin-bottom:8px}
+.admin-form-card>p {color:#64748b;margin-bottom:24px}
+.admin-form-card label {font-size:14px;font-weight:600;display:block;margin:0 0 18px}
+.admin-form-card label input,.admin-form-card label select,.admin-form-card label textarea {width:100%;display:block;margin-top:8px;padding:12px 13px;border:1px solid #cbd5e1;border-radius:8px;background:#fff;color:#17233b;font-weight:400;font-size:15px}
+.admin-form-card input[type=file] {padding:10px}
+.admin-form-grid {display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}
+.admin-image-fields {border:1px solid #e2e8f0;border-radius:10px;padding:18px;margin-top:10px}
+.admin-help {color:#64748b;font-size:13px;margin:0 0 15px}
+.admin-preview-wrap {min-height:120px;display:flex;justify-content:center;align-items:center;background:#f8fafc;border-radius:8px;border:1px dashed #cbd5e1;padding:12px}
+#productImagePreview {max-height:210px;max-width:100%;object-fit:contain}
+#productImagePreview[hidden] {display:none}
+#productImageHint {color:#64748b;font-size:14px}
+.admin-form-message {min-height:22px;margin:15px 0;font-size:14px}
+.admin-form-actions {display:flex;gap:12px;flex-wrap:wrap}
+.admin-form-actions button:disabled {opacity:.65;cursor:wait}
+@media(max-width:700px){.admin-form-grid{grid-template-columns:1fr}.admin-form-card{padding:18px}}

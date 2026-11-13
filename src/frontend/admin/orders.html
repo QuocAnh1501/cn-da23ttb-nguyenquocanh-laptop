@@ -1,0 +1,111 @@
+
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Quản lý đơn hàng - Laptop Store Admin</title>
+
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin-orders.css">
+    <script src="../assets/js/admin/orders.js" defer></script>
+</head>
+<body>
+
+    <p id="adminStatus"
+       class="admin-status"
+       role="status">
+        Đang kiểm tra quyền Admin...
+    </p>
+
+    <div id="adminApp" class="admin-layout" hidden>
+
+        <aside class="admin-sidebar">
+            <a href="products.html" class="admin-logo">
+                💻 Laptop Store
+                <small>ADMIN PANEL</small>
+            </a>
+
+            <nav class="admin-menu">
+                <a href="products.html">
+                    📦 Quản lý sản phẩm
+                </a>
+
+                <a href="orders.html" class="active">
+                    🧾 Quản lý đơn hàng
+                </a>
+
+                <a href="../index.html">
+                    🏠 Xem cửa hàng
+                </a>
+            </nav>
+
+            <div class="sidebar-bottom">
+                <span id="adminName"></span>
+
+                <button type="button" id="adminLogout">
+                    Đăng xuất
+                </button>
+            </div>
+        </aside>
+
+        <div class="admin-main">
+            <header class="admin-topbar">
+                <div>
+                    <span>HỆ THỐNG QUẢN TRỊ</span>
+                    <h2>Quản lý đơn hàng</h2>
+                </div>
+
+                <div class="admin-avatar">👤 Admin</div>
+            </header>
+
+            <main class="admin-content">
+                <div class="admin-page-title">
+                    <h1>Đơn hàng của khách hàng</h1>
+                    <p>
+                        Xác nhận thanh toán và quản lý
+                        quá trình giao hàng.
+                    </p>
+                </div>
+
+                <section class="admin-panel">
+                    <div class="panel-heading">
+                        <h2>Danh sách đơn hàng</h2>
+
+                        <button type="button"
+                                id="reloadOrders"
+                                class="admin-orders-btn">
+                            Làm mới
+                        </button>
+                    </div>
+
+                    <p id="ordersStatus" role="status">
+                        Đang tải đơn hàng...
+                    </p>
+
+                    <div class="admin-table-wrap">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>Mã đơn</th>
+                                    <th>Khách hàng</th>
+                                    <th>Tổng tiền</th>
+                                    <th>Phương thức</th>
+                                    <th>Thanh toán</th>
+                                    <th>Trạng thái đơn</th>
+                                    <th>Thao tác</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="ordersTableBody"></tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+</body>
+</html>

@@ -147,6 +147,74 @@ function renderProducts(products) {
         statusCell.appendChild(status);
         row.appendChild(statusCell);
 
+        // Cột thao tác
+        const actionCell = document.createElement("td");
+        const actions = document.createElement("div");
+        actions.className = "admin-actions";
+
+        // Nút sửa
+        const editButton = document.createElement("a");
+        editButton.href = `product-form.html?id=${product.id}`;
+        editButton.className = "admin-action-edit";
+        editButton.textContent = "✏️ Sửa";
+
+        // Nút xóa
+        const deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.className = "admin-action-delete";
+        deleteButton.textContent = "🗑️ Xóa";
+
+        deleteButton.addEventListener("click", async () => {
+            const confirmed = confirm(
+                `Bạn muốn ngừng bán ${product.name}?`
+            );
+
+            if (!confirmed) return;
+
+            const token = sessionStorage.getItem("laptop_token");
+
+            if (!token) {
+                goToLogin();
+                return;
+            }
+
+            deleteButton.disabled = true;
+
+            try {
+                const response = await fetch(
+                    `${API_URL}/products/${product.id}`,
+                    {
+                        method: "DELETE",
+                        headers: {
+                            Authorization: `Bearer ${token}`
+                        }
+                    }
+                );
+
+                if (response.status === 401) {
+                    goToLogin();
+                    return;
+                }
+
+                const result = await response.json();
+
+                if (!response.ok || !result.success) {
+                    throw new Error(
+                        result.message || "Không thể xóa sản phẩm"
+                    );
+                }
+
+                await loadProducts();
+            } catch (error) {
+                alert(error.message);
+                deleteButton.disabled = false;
+            }
+        });
+
+        actions.append(editButton, deleteButton);
+        actionCell.appendChild(actions);
+        row.appendChild(actionCell);
+
         productList.appendChild(row);
     }
 }

@@ -299,6 +299,28 @@ async function updateOrderStatus(orderId, data) {
                 409
             );
         }
+        // Không xác nhận hoặc giao đơn VietQR chưa nhận tiền
+        if (
+            order.payment_method === "bank_transfer" &&
+            order.payment_status !== "paid" &&
+            newStatus !== "cancelled"
+        ) {
+            throw createError(
+                "Đơn chuyển khoản chưa được xác nhận thanh toán",
+                409
+            );
+        }
+
+        // Không hủy đơn đã thanh toán nếu chưa có quy trình hoàn tiền
+        if (
+            newStatus === "cancelled" &&
+            order.payment_status === "paid"
+        ) {
+            throw createError(
+                "Đơn đã thanh toán cần xử lý hoàn tiền trước khi hủy",
+                409
+            );
+        }
 
         // Nếu hủy đơn: hoàn trả tồn kho
         if (newStatus === "cancelled") {
@@ -354,10 +376,79 @@ async function updateOrderStatus(orderId, data) {
 }
 
 
+// Admin xác nhận đã nhận tiền chuyển khoản
+async function confirmBankTransferPayment(orderId, data) {
+    const validOrderId = validateId(orderId);
+
+    if (data?.verified !== true) {
+        throw createError(
+            "Admin phải xác nhận đã kiểm tra giao dịch ngân hàng"
+        );
+    }
+
+    const connection = await pool.getConnection();
+
+    try {
+        await connection.beginTransaction();
+
+        // Khóa đơn để tránh xác nhận trùng đồng thời
+        const order = await orderModel.getOrderForUpdate(
+            connection,
+            validOrderId
+        );
+
+        if (!order) {
+            throw createError("Không tìm thấy đơn hàng", 404);
+        }
+
+        if (order.payment_method !== "bank_transfer") {
+            throw createError(
+                "Đơn hàng không thanh toán bằng chuyển khoản"
+            );
+        }
+
+        if (order.status === "cancelled") {
+            throw createError(
+                "Không thể xác nhận thanh toán cho đơn đã hủy",
+                409
+            );
+        }
+
+        if (order.payment_status === "paid") {
+            throw createError(
+                "Đơn hàng đã được xác nhận thanh toán",
+                409
+            );
+        }
+
+        const updated = await orderModel.markBankTransferPaid(
+            connection,
+            validOrderId
+        );
+
+        if (!updated) {
+            throw createError(
+                "Không thể cập nhật thanh toán",
+                409
+            );
+        }
+
+        await connection.commit();
+    } catch (error) {
+        await connection.rollback();
+        throw error;
+    } finally {
+        connection.release();
+    }
+
+    return orderModel.getOrderById(validOrderId);
+}
+
 module.exports = {
     createOrder,
     getMyOrders,
     getOrderDetail,
     getAllOrders,
-    updateOrderStatus
+    updateOrderStatus,
+    confirmBankTransferPayment
 };

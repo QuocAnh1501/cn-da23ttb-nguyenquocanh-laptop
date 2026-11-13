@@ -35,6 +35,9 @@
                 <a href="../index.html">
                     🏠 Xem cửa hàng
                 </a>
+                <a href="orders.html">
+                    🧾 Quản lý đơn hàng
+                </a>
             </nav>
 
             <div class="sidebar-bottom">
@@ -84,18 +87,24 @@
                 </section>
 
                 <!-- DANH SÁCH SẢN PHẨM -->
-                <section class="admin-panel">
+                <section class="admin-panel">     
+                <div class="panel-heading">
+                    <h2>Danh sách sản phẩm</h2>
 
-                    <div class="panel-heading">
-                        <h2>Danh sách sản phẩm</h2>
-
+                    <div class="admin-toolbar">
                         <input
                             type="search"
                             id="adminProductSearch"
                             placeholder="Tìm theo tên, thương hiệu..."
                             aria-label="Tìm kiếm sản phẩm"
                         >
+
+                        <a href="product-form.html"
+                        class="admin-primary-btn">
+                            + Thêm laptop
+                        </a>
                     </div>
+                </div>
 
                     <p id="productsStatus" role="status">
                         Đang tải sản phẩm...
@@ -110,6 +119,7 @@
                                     <th>Giá bán</th>
                                     <th>Tồn kho</th>
                                     <th>Trạng thái</th>
+                                    <th>Thao tác</th>
                                 </tr>
                             </thead>
 

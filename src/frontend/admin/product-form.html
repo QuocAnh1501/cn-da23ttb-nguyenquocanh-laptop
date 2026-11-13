@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thêm/Sửa laptop - Laptop Store Admin</title>
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin-extra.css">
+    <script src="../assets/js/admin/product-form.js" defer></script>
+</head>
+<body>
+    <p id="formPageStatus" class="admin-status" role="status">Đang kiểm tra quyền Admin...</p>
+    <main id="formPage" class="admin-form-page" hidden>
+        <a href="products.html" class="admin-back">← Quay về quản lý sản phẩm</a>
+        <section class="admin-form-card">
+            <h1 id="formTitle">Thêm laptop mới</h1>
+            <p>Nhập thông tin laptop. Chọn ảnh từ máy hoặc dán link ảnh.</p>
+            <form id="productForm">
+                <div class="admin-form-grid">
+                    <label>Tên sản phẩm *
+                        <input name="name" id="productName" required maxlength="200" placeholder="VD: Dell Inspiron 15">
+                    </label>
+                    <label>Đường dẫn thân thiện (slug) *
+                        <input name="slug" id="productSlug" required maxlength="220" placeholder="VD: dell-inspiron-15">
+                    </label>
+                    <label>Danh mục
+                        <select name="category_id" id="productCategory">
+                            <option value="">Chưa chọn danh mục</option>
+                        </select>
+                    </label>
+                    <label>Thương hiệu
+                        <input name="brand" maxlength="100" placeholder="Dell, ASUS, Lenovo...">
+                    </label>
+                    <label>Model
+                        <input name="model" maxlength="100" placeholder="Inspiron 15">
+                    </label>
+                    <label>Giá bán (VNĐ) *
+                        <input name="price" type="number" min="0" max="9999999999999" step="1" required>
+                    </label>
+                    <label>Số lượng tồn kho *
+                        <input name="stock" type="number" min="0" step="1" required>
+                    </label>
+                    <label>CPU
+                        <input name="cpu" maxlength="150" placeholder="Intel Core i5">
+                    </label>
+                    <label>RAM
+                        <input name="ram" maxlength="100" placeholder="16GB">
+                    </label>
+                    <label>Ổ cứng
+                        <input name="storage" maxlength="150" placeholder="512GB SSD">
+                    </label>
+                    <label>GPU
+                        <input name="gpu" maxlength="150" placeholder="Intel Graphics">
+                    </label>
+                    <label>Màn hình
+                        <input name="screen_size" maxlength="50" placeholder="15.6 inch">
+                    </label>
+                </div>
+
+                <label>Mô tả sản phẩm
+                    <textarea name="description" rows="4" placeholder="Mô tả laptop và nhu cầu sử dụng..."></textarea>
+                </label>
+
+                <div class="admin-image-fields">
+                    <label>Link ảnh sản phẩm (HTTP/HTTPS)
+                        <input name="image_url" id="productImageUrl" type="url" maxlength="500" placeholder="https://example.com/laptop.jpg">
+                    </label>
+                    <label>Hoặc tải ảnh từ máy (JPG, PNG, WebP; tối đa 5 MB)
+                        <input id="productImageFile" type="file" accept="image/jpeg,image/png,image/webp">
+                    </label>
+                    <p class="admin-help">Nếu chọn file, ảnh tải lên sẽ được ưu tiên thay thế link ảnh. Bỏ trống cả hai khi thêm mới để không dùng ảnh.</p>
+                    <div class="admin-preview-wrap">
+                        <img id="productImagePreview" alt="Xem trước ảnh sản phẩm" hidden>
+                        <span id="productImageHint">Chưa có ảnh xem trước</span>
+                    </div>
+                </div>
+
+                <p id="formMessage" class="admin-form-message" role="status" aria-live="polite"></p>
+                <div class="admin-form-actions">
+                    <button type="submit" id="saveProductBtn" class="admin-primary-btn">Lưu sản phẩm</button>
+                    <a href="products.html" class="admin-secondary-btn">Hủy / Trở lại</a>
+                </div>
+            </form>
+        </section>
+    </main>
+</body>
+</html>
