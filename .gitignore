@@ -32,3 +32,5 @@ Thumbs.db
 # Temporary files
 *.tmp
 *.bak
+# Ảnh sản phẩm tải lên từ Admin
+/src/backend/uploads/

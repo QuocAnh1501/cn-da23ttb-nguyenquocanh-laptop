@@ -2,11 +2,30 @@ require("dotenv").config();
 
 const express = require("express");
 const cors = require("cors");
-
+const path = require("node:path");
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+
+
+// Cho phép trình duyệt tải ảnh sản phẩm đã upload
+app.use(
+    "/uploads",
+    express.static(
+        path.join(__dirname, "uploads"),
+        {
+            index: false,
+            dotfiles: "deny"
+        }
+    )
+);
+
+// API tải ảnh - yêu cầu quyền Admin bên trong Router
+const productImageRoutes =
+    require("./routes/productImageRoutes");
+
+app.use("/api/uploads/products", productImageRoutes);
 
 app.get("/", (req, res) => {
 res.json({
