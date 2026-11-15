@@ -37,6 +37,19 @@ function formatPrice(value) {
     }).format(Number(value));
 }
 
+// Định dạng ngày giờ theo múi giờ Việt Nam
+function formatDate(value) {
+    if (!value) return "Chưa cập nhật";
+
+    const date = new Date(value);
+
+    return Number.isNaN(date.getTime())
+        ? "Chưa cập nhật"
+        : date.toLocaleString("vi-VN", {
+            timeZone: "Asia/Ho_Chi_Minh"
+        });
+}
+
 function createText(tag, text) {
     const element = document.createElement(tag);
     element.textContent = text;
@@ -216,6 +229,7 @@ function renderOrders(orders) {
 
         addCell(row, `#${order.id}`);
         addCell(row, order.full_name || order.receiver_name);
+        addCell(row, formatDate(order.created_at));
         addCell(row, formatPrice(order.total_amount));
 
         addCell(
@@ -246,7 +260,7 @@ function renderOrders(orders) {
         detailRow.hidden = true;
 
         const detailCell = document.createElement("td");
-        detailCell.colSpan = 7;
+        detailCell.colSpan = 8;
         detailCell.className = "admin-order-detail";
         detailRow.appendChild(detailCell);
 

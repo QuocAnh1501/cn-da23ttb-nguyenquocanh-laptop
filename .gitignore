@@ -34,3 +34,5 @@ Thumbs.db
 *.bak
 # Ảnh sản phẩm tải lên từ Admin
 /src/backend/uploads/
+# Sao lưu cơ sở dữ liệu
+/src/database/*_backup.sql

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thống kê doanh thu - Laptop Store Admin</title>
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin-management.css">
+    <script src="../assets/js/admin/management-common.js" defer></script>
+    <script src="../assets/js/admin/revenue.js" defer></script>
+</head>
+<body>
+    <p id="adminStatus" class="admin-status" role="status">Đang kiểm tra quyền Admin...</p>
+    <div id="adminApp" class="admin-layout" hidden>
+        <aside class="admin-sidebar">
+            <a href="products.html" class="admin-logo">💻 Laptop Store<small>ADMIN PANEL</small></a>
+            <nav class="admin-menu">
+                <a href="products.html">📦 Quản lý sản phẩm</a>
+                <a href="categories.html">📁 Quản lý danh mục</a>
+                <a href="orders.html">🧾 Quản lý đơn hàng</a>
+                <a href="revenue.html" class="active" aria-current="page">📊 Thống kê doanh thu</a>
+                <a href="../index.html">🏠 Xem cửa hàng</a>
+            </nav>
+            <div class="sidebar-bottom"><span id="adminName"></span><button type="button" id="adminLogout">Đăng xuất</button></div>
+        </aside>
+        <div class="admin-main">
+            <header class="admin-topbar"><div><span>HỆ THỐNG QUẢN TRỊ</span><h2>Thống kê doanh thu</h2></div><div class="admin-avatar">👤 Admin</div></header>
+            <main class="admin-content">
+                <div class="admin-page-title"><h1>Thống kê doanh thu</h1><p>Tổng tiền đơn đã thanh toán, chưa bị hủy, theo ngày đặt hàng (giờ Việt Nam).</p></div>
+                <section class="admin-panel management-section">
+                    <form id="revenueForm" class="revenue-filter">
+                        <label>Kỳ thống kê<select id="revenuePeriod"><option value="day">Theo ngày</option><option value="month" selected>Theo tháng</option><option value="quarter">Theo quý</option><option value="year">Theo năm</option></select></label>
+                        <label>Chọn ngày thuộc kỳ thống kê<input id="revenueDate" type="date" min="2000-01-01" max="2099-12-31" required></label>
+                        <button id="loadRevenue" type="submit" class="admin-primary-btn">Xem thống kê</button>
+                    </form>
+                    <p id="revenueMessage" class="management-message" role="status" aria-live="polite"></p>
+                    <p class="management-note">Chỉ tính tiền đã xác nhận thanh toán; chưa thống kê theo ngày nhận tiền thực tế, chưa trừ chi phí và chưa tính lợi nhuận.</p>
+                </section>
+                <div id="revenueResults" hidden>
+                    <section class="admin-stats"><div class="stat-card"><span>Doanh thu trong kỳ</span><strong id="revenueTotal">0 ₫</strong></div><div class="stat-card"><span>Số đơn đã thanh toán</span><strong id="revenueOrders">0</strong></div></section>
+                    <section class="admin-panel management-section">
+                        <div class="panel-heading"><h2>Biểu đồ doanh thu</h2><span id="revenueChartScale" class="management-note"></span></div>
+                        <p id="revenueEmpty" class="management-note" hidden>Không có đơn đã thanh toán trong kỳ này.</p>
+                        <div class="revenue-scroll" aria-hidden="true"><div id="revenueBars" class="revenue-bars"></div></div>
+                        <p class="management-note">Di chuột vào cột để xem giá trị; xem bảng bên dưới để đọc số liệu chính xác.</p>
+                    </section>
+                    <section class="admin-panel"><div class="panel-heading"><h2>Chi tiết doanh thu theo kỳ</h2></div><div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>Khoảng thời gian</th><th>Số đơn đã thanh toán</th><th>Doanh thu (VNĐ)</th></tr></thead><tbody id="revenueTableBody"></tbody></table></div></section>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

@@ -6,6 +6,13 @@ const path = require("node:path");
 const app = express();
 
 app.use(cors());
+
+// API nhận thông báo giao dịch từ SePay
+const paymentWebhookRoutes =
+    require("./routes/paymentWebhookRoutes");
+
+app.use("/api/webhooks", paymentWebhookRoutes);
+
 app.use(express.json());
 
 
@@ -57,6 +64,10 @@ app.use("/api/orders", orderRoutes);
 
 const chatbotRoutes = require("./routes/chatbotRoutes");
 app.use("/api/chatbot", chatbotRoutes);
+
+// API quản lý danh mục và thống kê doanh thu
+const adminRoutes = require("./routes/adminRoutes");
+app.use("/api/admin", adminRoutes);
 
 const errorMiddleware = require("./middlewares/errorMiddleware");
 app.use(errorMiddleware);

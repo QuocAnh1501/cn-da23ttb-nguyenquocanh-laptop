@@ -5,6 +5,8 @@ const token = sessionStorage.getItem("laptop_token");
 const profileForm = document.getElementById("profileForm");
 const profileMessage = document.getElementById("profileMessage");
 const saveButton = document.getElementById("saveButton");
+// Khởi tạo bộ chọn địa chỉ
+const profileAddressPicker = LaptopAddress.setupProfile();
 
 function showMessage(message, isError = false) {
     profileMessage.textContent = message;
@@ -51,6 +53,8 @@ async function loadProfile() {
 
         document.getElementById("address").value =
             user.address || "";
+        // Khôi phục địa chỉ đã lưu
+        await profileAddressPicker.restore(user.address || "");
 
     } catch (error) {
         showMessage(error.message, true);
@@ -67,8 +71,15 @@ profileForm.addEventListener("submit", async (event) => {
     const phone = document.getElementById("phone")
         .value.trim();
 
-    const address = document.getElementById("address")
-        .value.trim();
+    // Ghép địa chỉ chi tiết, xã/phường và tỉnh/thành
+        let address;
+
+        try {
+            address = profileAddressPicker.getValue();
+        } catch (error) {
+            showMessage(error.message, true);
+            return;
+        }
 
     saveButton.disabled = true;
     saveButton.textContent = "Đang lưu...";

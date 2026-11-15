@@ -1,0 +1,323 @@
+
+/* ============================================================
+   LAPTOP STORE - BỘ CHỌN ĐỊA CHỈ KHÁCH HÀNG
+   ============================================================ */
+
+
+/* 01. BỐ CỤC CÁC TRƯỜNG ĐỊA CHỈ */
+
+.address-fields {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 14px;
+    margin: 8px 0 14px;
+}
+
+.address-fields[hidden],
+#address[hidden],
+#shipping_address[hidden],
+.address-retry[hidden] {
+    display: none !important;
+}
+
+.address-field {
+    min-width: 0;
+}
+
+.address-field:last-of-type,
+.address-fields .address-note,
+.address-fields .address-retry {
+    grid-column: 1 / -1;
+}
+
+.address-field select,
+.address-field input {
+    display: block;
+    width: 100%;
+    min-width: 0;
+    padding: 12px 13px;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 8px;
+    font: inherit;
+    background: white;
+    color: var(--text, #17233b);
+}
+
+.address-field select:focus,
+.address-field input:focus {
+    outline: 2px solid #93c5fd;
+    outline-offset: 1px;
+}
+
+.address-field select:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+
+/* 02. THÔNG BÁO VÀ HƯỚNG DẪN */
+
+.address-note {
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--muted, #64748b);
+    margin: 10px 0 3px;
+    overflow-wrap: anywhere;
+}
+
+.address-note:empty {
+    display: none;
+}
+
+.address-retry {
+    justify-self: start;
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 12px;
+    background: transparent;
+    color: var(--text);
+    cursor: pointer;
+}
+
+
+/* 03. HỘP CHỌN TỈNH THÀNH VÀ XÃ PHƯỜNG */
+
+.address-combo {
+    position: relative;
+    min-width: 0;
+    width: 100%;
+}
+
+.address-combo select[hidden],
+.address-field select[hidden],
+.address-combo-panel[hidden] {
+    display: none !important;
+}
+
+.address-combo-trigger {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 10px;
+    width: 100%;
+    min-height: 46px;
+    padding: 11px 12px;
+
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 8px;
+
+    background: #ffffff;
+    color: var(--text, #17233b);
+
+    font: inherit;
+    font-size: 14px;
+    line-height: 1.5;
+    text-align: left;
+
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+
+
+/* Biểu tượng mũi tên */
+
+.address-combo-trigger::after {
+    content: "";
+    width: 8px;
+    height: 8px;
+    flex: 0 0 8px;
+
+    border-right: 2px solid currentColor;
+    border-bottom: 2px solid currentColor;
+
+    transform: rotate(45deg);
+    margin: -4px 2px 0 0;
+}
+
+.address-combo-trigger[aria-expanded="true"]::after {
+    transform: rotate(225deg);
+    margin-top: 4px;
+}
+
+.address-combo-trigger.is-placeholder {
+    color: var(--muted, #64748b);
+}
+
+.address-combo-trigger:disabled {
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.address-combo-trigger:focus-visible {
+    outline: 2px solid #93c5fd;
+    outline-offset: 2px;
+}
+
+
+/* 04. KHUNG DANH SÁCH THẢ XUỐNG */
+
+.address-combo-panel {
+    position: absolute;
+    z-index: 40;
+
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+
+    min-width: 0;
+    padding: 8px;
+
+    background: #ffffff;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 10px;
+
+    box-shadow: 0 10px 25px rgba(15, 23, 42, 0.15);
+}
+
+
+/* 05. Ô TÌM KIẾM */
+
+.address-field .address-combo-search {
+    width: 100%;
+    min-width: 0;
+
+    margin: 0 0 8px;
+    padding: 9px 10px;
+
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 7px;
+
+    font-size: 14px;
+    background: #f8fafc;
+}
+
+
+/* 06. DANH SÁCH TỈNH, XÃ VÀ THANH CUỘN */
+
+.address-combo-list {
+    max-height: 220px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+}
+
+.address-combo-option {
+    display: block;
+    width: 100%;
+
+    padding: 9px 8px;
+
+    border: 0;
+    border-radius: 6px;
+
+    background: transparent;
+    color: var(--text, #17233b);
+
+    font: inherit;
+    font-size: 14px;
+    text-align: left;
+
+    cursor: pointer;
+    overflow-wrap: anywhere;
+}
+
+.address-combo-option:hover,
+.address-combo-option:focus-visible,
+.address-combo-option[aria-pressed="true"] {
+    background: #eff6ff;
+    color: #1d4ed8;
+}
+
+.address-combo-empty {
+    padding: 10px 6px;
+    font-size: 13px;
+    color: var(--muted, #64748b);
+}
+
+
+/* 07. TRANG THÔNG TIN CÁ NHÂN */
+
+.profile-card .address-fields {
+    grid-template-columns: minmax(0, 1fr);
+}
+
+
+/* 08. CHỌN ĐỊA CHỈ NHẬN HÀNG KHI THANH TOÁN */
+
+.address-mode {
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 10px;
+    padding: 14px;
+    margin-bottom: 16px;
+}
+
+.address-mode legend {
+    font-weight: 600;
+    padding: 0 6px;
+}
+
+.checkout-card .address-mode label {
+    display: flex;
+    align-items: center;
+
+    margin: 8px 0;
+    gap: 10px;
+
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.checkout-card .address-mode input[type="radio"] {
+    width: 18px;
+    height: 18px;
+    margin: 0;
+    padding: 0;
+
+    flex: none;
+    accent-color: #2563eb;
+}
+
+.checkout-card input[readonly],
+.checkout-card textarea[readonly] {
+    background: #f1f5f9;
+    color: #475569;
+}
+
+
+/* 09. DARK MODE - GIAO DIỆN TỐI */
+
+[data-theme="dark"] .address-field select,
+[data-theme="dark"] .address-field input,
+[data-theme="dark"] .address-combo-trigger,
+[data-theme="dark"] .address-combo-panel,
+[data-theme="dark"] .address-field .address-combo-search {
+    background: #162033;
+    color: #f1f5f9;
+    border-color: #334155;
+}
+
+[data-theme="dark"] .address-combo-trigger.is-placeholder {
+    color: #94a3b8;
+}
+
+[data-theme="dark"] .address-combo-option:hover,
+[data-theme="dark"] .address-combo-option:focus-visible,
+[data-theme="dark"] .address-combo-option[aria-pressed="true"] {
+    background: #334155;
+    color: #93c5fd;
+}
+
+[data-theme="dark"] .checkout-card input[readonly],
+[data-theme="dark"] .checkout-card textarea[readonly] {
+    background: #334155;
+    color: #cbd5e1;
+}
+
+
+/* 10. RESPONSIVE - GIAO DIỆN ĐIỆN THOẠI */
+
+@media (max-width: 620px) {
+    .address-fields {
+        grid-template-columns: 1fr;
+    }
+}

@@ -18,6 +18,11 @@ router.post("/", orderController.createOrder);
 // Khách hàng xem lịch sử mua hàng
 router.get("/my", orderController.getMyOrders);
 
+// Khách hàng hủy đơn chưa được xác nhận
+router.patch(
+    "/:id/cancel",
+    orderController.cancelMyOrder
+);
 // Chỉ Admin xem toàn bộ đơn hàng
 router.get(
     "/admin/all",

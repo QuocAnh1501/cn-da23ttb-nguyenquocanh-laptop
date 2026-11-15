@@ -252,7 +252,11 @@ async function getAllOrders() {
 }
 
 
-async function updateOrderStatus(orderId, data) {
+    async function updateOrderStatus(
+        orderId,
+        data,
+        customerId = null
+    ) {
     const validOrderId = validateId(orderId);
     const newStatus = data?.status;
 
@@ -289,7 +293,49 @@ async function updateOrderStatus(orderId, data) {
         if (!order) {
             throw createError("Không tìm thấy đơn hàng", 404);
         }
+        // Kiểm tra quyền hủy đơn của khách hàng
+        if (customerId !== null) {
 
+            // Chỉ được hủy đơn hàng của chính mình
+            if (Number(order.user_id) !== Number(customerId)) {
+                throw createError("Không tìm thấy đơn hàng", 404);
+            }
+
+            // Khách hàng chỉ được thực hiện thao tác hủy
+            if (newStatus !== "cancelled") {
+                throw createError(
+                    "Bạn không có quyền cập nhật trạng thái này",
+                    403
+                );
+            }
+
+            // Chỉ hủy khi Admin chưa xác nhận
+            if (order.status !== "pending") {
+                throw createError(
+                    "Chỉ được hủy đơn hàng đang chờ xác nhận",
+                    409
+                );
+            }
+
+            // Không tự hủy đơn đã thanh toán
+            if (order.payment_status !== "unpaid") {
+                throw createError(
+                    "Vui lòng liên hệ cửa hàng để xử lý hoàn tiền",
+                    409
+                );
+            }
+
+            // Đối với VietQR, khách phải xác nhận chưa chuyển tiền
+            if (
+                order.payment_method === "bank_transfer" &&
+                data.not_transferred !== true
+            ) {
+                throw createError(
+                    "Bạn cần xác nhận chưa chuyển khoản",
+                    409
+                );
+            }
+        }
         // Không cho phép chuyển trạng thái sai quy trình
         if (
             !allowedTransitions[order.status].includes(newStatus)

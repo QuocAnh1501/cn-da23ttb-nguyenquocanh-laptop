@@ -1,0 +1,36 @@
+/* ==========================================
+   QUẢN LÝ DANH MỤC VÀ THỐNG KÊ DOANH THU
+   Giữ admin.css hiện tại, chỉ thêm CSS riêng.
+   ========================================== */
+[hidden] { display: none !important; }
+.management-section { margin-bottom: 24px; }
+.management-section h2 { font-size: 20px; }
+.management-form { display: grid; gap: 16px; margin-top: 20px; max-width: 650px; }
+.management-form label, .revenue-filter label { display: grid; gap: 8px; font-weight: 600; font-size: 14px; }
+.management-form input, .management-form textarea, .revenue-filter input, .revenue-filter select {
+    display: block; width: 100%; padding: 11px 13px; border: 1px solid var(--border);
+    border-radius: 8px; background: white; color: var(--text); font: inherit; font-weight: 400;
+}
+.management-form textarea { resize: vertical; }
+.management-message { margin-top: 14px; color: #166534; font-size: 14px; }
+.management-message:empty { display: none; }
+.management-error { color: #b91c1c; }
+.management-note { margin: 10px 0 14px; font-size: 13px; color: var(--muted); }
+.admin-management button:disabled, .management-form button:disabled, .revenue-filter button:disabled, .admin-actions button:disabled, #reloadCategories:disabled { opacity: 0.55; cursor: not-allowed; }
+/* Bộ lọc và số liệu doanh thu */
+.revenue-filter { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; }
+.revenue-filter label { flex: 1 1 210px; }
+#revenueTotal { overflow-wrap: anywhere; }
+/* Biểu đồ cột: trục giá trị tương đối theo cột cao nhất; bảng có số chính xác */
+.revenue-scroll { overflow-x: auto; padding: 10px 0; }
+.revenue-bars { display: flex; gap: 10px; align-items: stretch; min-width: 100%; width: max-content; }
+.revenue-column { flex: 1 0 44px; min-width: 44px; text-align: center; }
+.revenue-track {
+    display: flex; align-items: flex-end; justify-content: center; height: 250px;
+    border-bottom: 1px solid #94a3b8;
+    background: repeating-linear-gradient(to top, transparent 0, transparent calc(25% - 1px), #e2e8f0 calc(25% - 1px), #e2e8f0 25%);
+}
+.revenue-bar { background: #2563eb; width: 70%; min-width: 12px; max-width: 60px; border-radius: 4px 4px 0 0; }
+.revenue-column:hover .revenue-bar { background: #1d4ed8; }
+.revenue-label { display: block; margin-top: 8px; font-size: 11px; color: var(--muted); white-space: nowrap; }
+@media (max-width: 700px) { .revenue-track { height: 190px; } .management-section { padding: 18px; } }

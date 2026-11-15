@@ -104,7 +104,18 @@ async function getOrderPayment(req, res, next) {
             error.statusCode = 400;
             throw error;
         }
+        // Không cấp mã QR cho đơn đã hủy hoặc đã thanh toán
+        if (
+            order.status === "cancelled" ||
+            order.payment_status === "paid"
+        ) {
+            const error = new Error(
+                "Đơn hàng không còn cần thanh toán"
+            );
 
+            error.statusCode = 409;
+            throw error;
+        }
         const payment = paymentService.getBankTransferInfo(order);
 
         return res.status(200).json({
@@ -134,6 +145,28 @@ async function confirmBankTransfer(req, res, next) {
         next(error);
     }
 }
+// Khách hàng hủy đơn hàng của mình
+async function cancelMyOrder(req, res, next) {
+    try {
+        const order = await orderService.updateOrderStatus(
+            req.params.id,
+            {
+                status: "cancelled",
+                not_transferred: req.body?.not_transferred
+            },
+            req.user.id
+        );
+
+        return res.status(200).json({
+            success: true,
+            message: "Hủy đơn hàng thành công",
+            data: order
+        });
+
+    } catch (error) {
+        next(error);
+    }
+}
 
 module.exports = {
     createOrder,
@@ -142,5 +175,6 @@ module.exports = {
     getAllOrders,
     updateOrderStatus,
     getOrderPayment,
-    confirmBankTransfer
+    confirmBankTransfer,
+    cancelMyOrder
 };

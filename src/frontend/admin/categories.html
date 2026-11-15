@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quản lý danh mục - Laptop Store Admin</title>
+    <link rel="stylesheet" href="../assets/css/admin.css">
+    <link rel="stylesheet" href="../assets/css/admin-management.css">
+    <script src="../assets/js/admin/management-common.js" defer></script>
+    <script src="../assets/js/admin/categories.js" defer></script>
+</head>
+<body>
+    <p id="adminStatus" class="admin-status" role="status">Đang kiểm tra quyền Admin...</p>
+    <div id="adminApp" class="admin-layout" hidden>
+        <aside class="admin-sidebar">
+            <a href="products.html" class="admin-logo">💻 Laptop Store<small>ADMIN PANEL</small></a>
+            <nav class="admin-menu">
+                <a href="products.html">📦 Quản lý sản phẩm</a>
+                <a href="categories.html" class="active" aria-current="page">📁 Quản lý danh mục</a>
+                <a href="orders.html">🧾 Quản lý đơn hàng</a>
+                <a href="revenue.html">📊 Thống kê doanh thu</a>
+                <a href="../index.html">🏠 Xem cửa hàng</a>
+            </nav>
+            <div class="sidebar-bottom"><span id="adminName"></span><button type="button" id="adminLogout">Đăng xuất</button></div>
+        </aside>
+        <div class="admin-main">
+            <header class="admin-topbar"><div><span>HỆ THỐNG QUẢN TRỊ</span><h2>Quản lý danh mục</h2></div><div class="admin-avatar">👤 Admin</div></header>
+            <main class="admin-content">
+                <div class="admin-page-title"><h1>Danh mục laptop</h1><p>Thêm, sửa tên, mô tả và quản lý trạng thái danh mục.</p></div>
+                <section class="admin-stats">
+                    <div class="stat-card"><span>Danh mục đang sử dụng</span><strong id="categoryCount">0</strong></div>
+                    <div class="stat-card"><span>Danh mục ngừng sử dụng</span><strong id="categoryInactive">0</strong></div>
+                </section>
+                <section class="admin-panel management-section">
+                    <h2 id="categoryFormTitle">Thêm danh mục</h2>
+                    <form id="categoryForm" class="management-form">
+                        <label>Tên danh mục *<input id="categoryName" maxlength="100" required placeholder="VD: Laptop Gaming"></label>
+                        <label>Mô tả<textarea id="categoryDescription" rows="3" maxlength="5000" placeholder="Mô tả danh mục (không bắt buộc)"></textarea></label>
+                        <div class="admin-actions">
+                            <button type="submit" id="saveCategory" class="admin-primary-btn">Thêm danh mục</button>
+                            <button type="button" id="cancelCategoryEdit" class="admin-secondary-btn" hidden>Hủy sửa</button>
+                        </div>
+                    </form>
+                    <p id="categoryMessage" class="management-message" role="status" aria-live="polite"></p>
+                </section>
+                <section class="admin-panel">
+                    <div class="panel-heading"><h2>Danh sách danh mục</h2><div class="admin-toolbar"><input id="categorySearch" type="search" placeholder="Tìm danh mục..." aria-label="Tìm danh mục"><button id="reloadCategories" class="admin-orders-btn" type="button">Làm mới</button></div></div>
+                    <p class="management-note">Chỉ ngừng sử dụng được danh mục không còn sản phẩm đang bán. Danh mục ngừng sử dụng có thể khôi phục.</p>
+                    <div class="admin-table-wrap"><table class="admin-table"><thead><tr><th>ID</th><th>Tên danh mục</th><th>Mô tả</th><th>Sản phẩm đang bán</th><th>Trạng thái</th><th>Thao tác</th></tr></thead><tbody id="categoryTableBody"></tbody></table></div>
+                </section>
+            </main>
+        </div>
+    </div>
+</body>
+</html>

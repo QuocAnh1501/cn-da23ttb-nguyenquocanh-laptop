@@ -20,6 +20,8 @@ function formatPrice(value) {
     }).format(Number(value));
 }
 
+
+// Định dạng thời gian theo múi giờ Việt Nam
 function formatDate(value) {
     if (!value) return "Chưa cập nhật";
 
@@ -27,7 +29,9 @@ function formatDate(value) {
 
     return Number.isNaN(date.getTime())
         ? "Chưa cập nhật"
-        : date.toLocaleString("vi-VN");
+        : date.toLocaleString("vi-VN", {
+            timeZone: "Asia/Ho_Chi_Minh"
+        });
 }
 
 function createText(tag, content, className = "") {
@@ -48,7 +52,7 @@ function goToLogin() {
 }
 
 // Gọi API với JWT của khách hàng
-async function getData(path) {
+async function getData(path, options = {}) {
     const token = sessionStorage.getItem("laptop_token");
 
     if (!token) {
@@ -57,7 +61,9 @@ async function getData(path) {
     }
 
     const response = await fetch(`${API_URL}${path}`, {
+        ...options,
         headers: {
+            ...options.headers,
             Authorization: `Bearer ${token}`
         }
     });
@@ -260,6 +266,47 @@ async function toggleOrderQr(order, box, button) {
     }
 }
 
+// Khách hàng yêu cầu hủy đơn hàng
+async function cancelOrder(order, button) {
+
+    const isBankTransfer =
+        order.payment_method === "bank_transfer";
+
+    const message = isBankTransfer
+        ? `Bạn xác nhận chưa chuyển tiền cho đơn #${order.id} và muốn hủy đơn?\n\nNếu đã chuyển khoản, vui lòng liên hệ cửa hàng.`
+        : `Bạn có chắc chắn muốn hủy đơn hàng #${order.id} không?`;
+
+    const confirmed = window.confirm(message);
+
+    if (!confirmed) return;
+
+    button.disabled = true;
+    button.textContent = "Đang hủy...";
+
+    try {
+        await getData(`/orders/${order.id}/cancel`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                not_transferred: isBankTransfer
+            })
+        });
+
+        alert("Hủy đơn hàng thành công!");
+
+        // Tải lại danh sách từ MariaDB
+        await loadOrders();
+
+    } catch (error) {
+        alert(error.message);
+
+        button.disabled = false;
+        button.textContent = "Hủy đơn hàng";
+    }
+}
+
 // Hiển thị danh sách đơn hàng
 function renderOrders(orders) {
     ordersList.replaceChildren();
@@ -360,7 +407,26 @@ function renderOrders(orders) {
 
             card.append(qrButton, qrBox);
         }
+        // Chỉ hiển thị nút hủy cho đơn chưa xác nhận,
+        // chưa thanh toán
+        if (
+            order.status === "pending" &&
+            order.payment_status === "unpaid"
+        ) {
+            const cancelButton = createText(
+                "button",
+                "Hủy đơn hàng",
+                "order-cancel-button"
+            );
 
+            cancelButton.type = "button";
+
+            cancelButton.addEventListener("click", () => {
+                cancelOrder(order, cancelButton);
+            });
+
+            card.appendChild(cancelButton);
+        }
         ordersList.appendChild(card);
 
     });

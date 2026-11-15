@@ -1290,3 +1290,42 @@ a {
         font-size: 13px;
     }
 }
+
+/* ==================================================
+   HỦY ĐƠN HÀNG - TRANG LỊCH SỬ MUA HÀNG
+   ================================================== */
+
+.order-cancel-button {
+    display: inline-block;
+    background: #fef2f2;
+    color: #dc2626;
+    border: 1px solid #fecaca;
+    border-radius: 8px;
+    padding: 11px 20px;
+    margin: 10px 0 0 12px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+}
+
+.order-cancel-button:hover {
+    background: #dc2626;
+    color: #ffffff;
+}
+
+.order-cancel-button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Giao diện tối */
+[data-theme="dark"] .order-cancel-button {
+    background: #450a0a;
+    color: #fca5a5;
+    border-color: #991b1b;
+}
+
+[data-theme="dark"] .order-cancel-button:hover {
+    background: #991b1b;
+    color: #ffffff;
+}

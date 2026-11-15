@@ -13,6 +13,10 @@ const placeOrderButton =
 let currentCart = null;
 let submitting = false;
 
+// Khởi tạo chức năng chọn địa chỉ nhận hàng
+const checkoutAddressPicker =
+    LaptopAddress.setupCheckout();
+
 function formatPrice(value) {
     return new Intl.NumberFormat("vi-VN", {
         style: "currency",
@@ -113,15 +117,8 @@ async function loadCheckout() {
 
         currentCart = cart;
 
-        // Tự điền thông tin đã lưu trong MariaDB
-        document.getElementById("receiver_name").value =
-            user.full_name || "";
-
-        document.getElementById("receiver_phone").value =
-            user.phone || "";
-
-        document.getElementById("shipping_address").value =
-            user.address || "";
+        // Sử dụng thông tin mặc định hoặc địa chỉ khác
+        checkoutAddressPicker.setCustomer(user);
 
         renderOrderSummary(cart);
 
@@ -145,8 +142,15 @@ checkoutForm.addEventListener("submit", async (event) => {
     const receiver_phone = document
         .getElementById("receiver_phone").value.trim();
 
-    const shipping_address = document
-        .getElementById("shipping_address").value.trim();
+        // Lấy địa chỉ nhận hàng theo lựa chọn của khách
+        let shipping_address;
+
+        try {
+            shipping_address = checkoutAddressPicker.getValue();
+        } catch (error) {
+            showStatus(error.message, true);
+            return;
+        }
 
     // Lấy phương thức thanh toán khách hàng đã chọn
     const payment_method = checkoutForm
