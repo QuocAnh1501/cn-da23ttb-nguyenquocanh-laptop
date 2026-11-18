@@ -240,6 +240,26 @@ async function markBankTransferPaid(connection, orderId) {
     return result.affectedRows === 1;
 }
 
+// Xóa những sản phẩm đã đặt hàng, giữ lại các sản phẩm khác
+async function removeSelectedCartItems(connection, cartId, itemIds) {
+    if (!Array.isArray(itemIds) || itemIds.length === 0) {
+        throw new Error("Chưa chọn sản phẩm để xóa khỏi giỏ");
+    }
+
+    const placeholders = itemIds.map(() => "?").join(", ");
+
+    const [result] = await connection.query(
+        `DELETE FROM cart_items
+         WHERE cart_id = ?
+         AND id IN (${placeholders})`,
+        [cartId, ...itemIds]
+    );
+
+    if (result.affectedRows !== itemIds.length) {
+        throw new Error("Không thể cập nhật giỏ hàng sau khi đặt");
+    }
+}
+
 module.exports = {
     findCartForUpdate,
     getCartItemsForUpdate,
@@ -256,5 +276,6 @@ module.exports = {
     updateOrderStatus,
     restoreStock,
     getOrderItemsForUpdate,
-    markBankTransferPaid
+    markBankTransferPaid,
+    removeSelectedCartItems
 };

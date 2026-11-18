@@ -12,6 +12,33 @@ const placeOrderButton =
 
 let currentCart = null;
 let submitting = false;
+let selectedCartItemIds = [];
+
+// Đọc danh sách ID dòng giỏ hàng đã chọn
+function readSelectedCartItemIds() {
+    try {
+        const ids = JSON.parse(
+            sessionStorage.getItem("laptop_checkout_item_ids") || "[]"
+        );
+
+        if (
+            !Array.isArray(ids) ||
+            ids.length === 0 ||
+            !ids.every(id =>
+                typeof id === "number" &&
+                Number.isSafeInteger(id) &&
+                id > 0
+            ) ||
+            new Set(ids).size !== ids.length
+        ) {
+            return [];
+        }
+
+        return ids;
+    } catch {
+        return [];
+    }
+}
 
 // Khởi tạo chức năng chọn địa chỉ nhận hàng
 const checkoutAddressPicker =
@@ -115,12 +142,50 @@ async function loadCheckout() {
             return;
         }
 
-        currentCart = cart;
+// Chỉ hiển thị những sản phẩm đã chọn ở giỏ hàng
+selectedCartItemIds = readSelectedCartItemIds();
+
+if (selectedCartItemIds.length === 0) {
+    throw new Error(
+        "Bạn chưa chọn sản phẩm. Vui lòng quay lại giỏ hàng."
+    );
+}
+
+const selectedSet = new Set(selectedCartItemIds);
+
+const selectedItems = cart.items.filter(item =>
+    selectedSet.has(Number(item.id))
+);
+
+if (selectedItems.length !== selectedSet.size) {
+    throw new Error(
+        "Giỏ hàng đã thay đổi. Vui lòng chọn lại sản phẩm."
+    );
+}
+
+if (selectedItems.some(item =>
+    Number(item.is_active) !== 1 ||
+    Number(item.quantity) > Number(item.stock)
+)) {
+    throw new Error(
+        "Có sản phẩm không đủ hàng. Vui lòng kiểm tra giỏ hàng."
+    );
+}
+
+// Tổng tiền tạm tính của các sản phẩm được chọn
+currentCart = {
+    ...cart,
+    items: selectedItems,
+    total: selectedItems.reduce(
+        (sum, item) => sum + Number(item.subtotal),
+        0
+    )
+};
 
         // Sử dụng thông tin mặc định hoặc địa chỉ khác
         checkoutAddressPicker.setCustomer(user);
 
-        renderOrderSummary(cart);
+        renderOrderSummary(currentCart);
 
         checkoutContent.hidden = false;
         showStatus("");
@@ -167,17 +232,29 @@ checkoutForm.addEventListener("submit", async (event) => {
     placeOrderButton.textContent = "Đang đặt hàng...";
     showStatus("");
 
-    try {
-        // 1. Tạo đơn hàng - chỉ gọi một lần
-        const order = await apiRequest("/orders", {
-            method: "POST",
-            body: JSON.stringify({
-                receiver_name,
-                receiver_phone,
-                shipping_address,
-                payment_method
-            })
-        });
+
+try {
+    // 1. Tạo đơn hàng từ các sản phẩm đã chọn
+    const order = await apiRequest("/orders", {
+        method: "POST",
+        body: JSON.stringify({
+            receiver_name,
+            receiver_phone,
+            shipping_address,
+            payment_method,
+
+            // ID các dòng giỏ hàng muốn thanh toán
+            cart_item_ids: selectedCartItemIds
+        })
+    });
+
+    // 2. Chỉ xóa lựa chọn sau khi tạo đơn thành công
+    sessionStorage.removeItem(
+        "laptop_checkout_item_ids"
+    );
+
+    // 3. Hiển thị thông báo đặt hàng thành công
+    checkoutContent.hidden = true;
 
         // 2. Hiển thị thông báo thành công
         checkoutContent.hidden = true;

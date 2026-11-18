@@ -8,6 +8,7 @@
 
     <title>Laptop Store - Laptop chính hãng</title>
 
+    <link rel="stylesheet" href="assets/css/product-filters.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="stylesheet" href="assets/css/chatbot.css">
     <script src="assets/js/main.js" defer></script>
@@ -71,12 +72,98 @@
                 >
             </div>
 
-            <p id="productStatus" class="status-message">
-                Đang tải sản phẩm...
-            </p>
 
-            <div id="productList" class="product-grid">
-                <!-- JavaScript hiển thị laptop từ API -->
+            <!-- ==================================================
+                BỘ LỌC VÀ DANH SÁCH LAPTOP
+                ================================================== -->
+            <div class="products-layout">
+
+                <!-- BÊN TRÁI: BỘ LỌC SẢN PHẨM -->
+                <aside class="product-filters">
+
+                    <div class="filter-header">
+                        <h3>🔎 Bộ lọc sản phẩm</h3>
+                        <button type="button" id="clearProductFilters">
+                            Xóa lọc
+                        </button>
+                    </div>
+
+                    <!-- LỌC THEO DANH MỤC -->
+                    <div class="filter-group">
+                        <h4>Danh mục laptop</h4>
+
+                        <!-- Danh mục lấy tự động từ MariaDB -->
+                        <div id="categoryFilterList"
+                            class="filter-options">
+                            <p>Đang tải danh mục...</p>
+                        </div>
+                    </div>
+
+                    <!-- LỌC THEO KHOẢNG GIÁ -->
+                    <div class="filter-group">
+
+                        <h4>Khoảng giá</h4>
+
+                        <div id="priceFilterList"
+                            class="filter-options">
+
+                            <label class="filter-option">
+                                <input type="checkbox"
+                                    class="filter-price"
+                                    data-min="0"
+                                    data-max="10000000">
+                                <span>Dưới 10 triệu</span>
+                            </label>
+
+                            <label class="filter-option">
+                                <input type="checkbox"
+                                    class="filter-price"
+                                    data-min="10000000"
+                                    data-max="15000000">
+                                <span>10 – dưới 15 triệu</span>
+                            </label>
+
+                            <label class="filter-option">
+                                <input type="checkbox"
+                                    class="filter-price"
+                                    data-min="15000000"
+                                    data-max="20000000">
+                                <span>15 – dưới 20 triệu</span>
+                            </label>
+
+                            <label class="filter-option">
+                                <input type="checkbox"
+                                    class="filter-price"
+                                    data-min="20000000"
+                                    data-max="30000000">
+                                <span>20 – dưới 30 triệu</span>
+                            </label>
+
+                            <label class="filter-option">
+                                <input type="checkbox"
+                                    class="filter-price"
+                                    data-min="30000000">
+                                <span>Từ 30 triệu trở lên</span>
+                            </label>
+
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- BÊN PHẢI: DANH SÁCH LAPTOP -->
+                <div class="products-results">
+
+                    <p id="productStatus"
+                    class="status-message">
+                        Đang tải sản phẩm...
+                    </p>
+
+                    <div id="productList" class="product-grid">
+                        <!-- JavaScript hiển thị sản phẩm -->
+                    </div>
+
+                </div>
+
             </div>
 
         </div>

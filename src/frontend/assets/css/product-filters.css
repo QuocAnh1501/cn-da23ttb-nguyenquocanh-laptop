@@ -1,0 +1,155 @@
+
+/* ==================================================
+   LAPTOP STORE - BỘ LỌC DANH MỤC VÀ GIÁ TIỀN
+   ================================================== */
+
+/* 01. BỐ CỤC BỘ LỌC TRÁI - SẢN PHẨM PHẢI */
+
+.products-layout {
+    display: grid;
+    grid-template-columns: 250px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+}
+
+.products-results {
+    min-width: 0;
+}
+
+/* 02. KHUNG BỘ LỌC */
+
+.product-filters {
+    background: #ffffff;
+    border: 1px solid var(--border, #e2e8f0);
+    border-radius: 14px;
+    padding: 20px;
+    position: sticky;
+    top: 100px;
+}
+
+.filter-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 20px;
+}
+
+.filter-header h3 {
+    font-size: 17px;
+    color: var(--text, #17233b);
+}
+
+#clearProductFilters {
+    border: none;
+    background: transparent;
+    color: #2563eb;
+    font: inherit;
+    font-size: 13px;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+/* 03. NHÓM DANH MỤC VÀ GIÁ TIỀN */
+
+.filter-group {
+    padding: 15px 0;
+    border-top: 1px solid var(--border, #e2e8f0);
+}
+
+.filter-group h4 {
+    margin: 0 0 14px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.filter-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* 04. CHECKBOX */
+
+.filter-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    font-size: 14px;
+    line-height: 1.5;
+    cursor: pointer;
+}
+
+.filter-option input[type="checkbox"] {
+    flex: 0 0 auto;
+    width: 17px;
+    height: 17px;
+    margin-top: 2px;
+    accent-color: #2563eb;
+    cursor: pointer;
+}
+
+.filter-option:hover {
+    color: #2563eb;
+}
+
+/* 05. DANH SÁCH SẢN PHẨM */
+
+.products-results .product-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+}
+
+.products-results .product-card {
+    min-width: 0;
+}
+
+.products-results .product-card h3 {
+    overflow-wrap: anywhere;
+}
+
+/* 06. GIAO DIỆN TỐI */
+
+[data-theme="dark"] .product-filters {
+    background: #1e293b;
+    border-color: #334155;
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .filter-header h3 {
+    color: #f1f5f9;
+}
+
+[data-theme="dark"] .filter-group {
+    border-color: #334155;
+}
+
+/* 07. RESPONSIVE */
+
+@media (max-width: 1100px) {
+    .products-results .product-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+@media (max-width: 760px) {
+    .products-layout {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .product-filters {
+        position: static;
+    }
+
+    .filter-options {
+        max-height: 210px;
+        overflow-y: auto;
+    }
+}
+
+@media (max-width: 480px) {
+    .products-results .product-grid {
+        grid-template-columns: 1fr;
+    }
+}

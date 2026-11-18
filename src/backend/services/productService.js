@@ -54,7 +54,17 @@ async function createProduct(data) {
         error.statusCode = 400;
         throw error;
     }
+    // Kiểm tra trạng thái sản phẩm mới
+    const is_new = Number(data.is_new ?? 0);
 
+    if (![0, 1].includes(is_new)) {
+        const error = new Error(
+            "Trạng thái sản phẩm mới không hợp lệ"
+        );
+
+        error.statusCode = 400;
+        throw error;
+    }
     let category_id = null;
 
     if (data.category_id !== undefined &&
@@ -75,7 +85,8 @@ async function createProduct(data) {
         name,
         slug,
         price,
-        stock
+        stock,
+        is_new
     });
 }
 
@@ -102,7 +113,7 @@ async function updateProduct(id, data) {
     const allowedFields = [
         "category_id", "name", "slug", "brand", "model",
         "description", "price", "stock", "cpu", "ram",
-        "storage", "gpu", "screen_size", "image_url"
+        "storage", "gpu", "screen_size", "image_url", "is_new"
     ];
 
     for (const field of Object.keys(updates)) {
@@ -166,7 +177,21 @@ async function updateProduct(id, data) {
             }
         }
     }
+// Kiểm tra trạng thái sản phẩm mới khi cập nhật
+if ("is_new" in updates) {
+    const isNew = Number(updates.is_new);
 
+    if (![0, 1].includes(isNew)) {
+        const error = new Error(
+            "Trạng thái sản phẩm mới không hợp lệ"
+        );
+
+        error.statusCode = 400;
+        throw error;
+    }
+
+    updates.is_new = isNew;
+}
     return productModel.update(productId, updates);
 }
 

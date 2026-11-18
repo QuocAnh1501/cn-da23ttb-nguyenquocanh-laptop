@@ -20,20 +20,96 @@
             <a href="cart.html">
                 🛒 Giỏ hàng
             </a>
-            <a href="orders.html">
-                📦 Đơn hàng
-            </a>
+        
             <a href="login.html" id="loginLink">
                 Đăng nhập
             </a>
             
-            <!-- Hiển thị sau khi đăng nhập -->
-            <a
-                href="profile.html"
-                id="accountLink"
-                class="account-greeting"
-                hidden>
-            </a>
+
+            <!-- ==========================================
+                MENU TÀI KHOẢN KHÁCH HÀNG
+                ========================================== -->
+            <div id="accountMenu" class="account-menu" hidden>
+
+                <!-- Nút mở / đóng menu -->
+                <button
+                    type="button"
+                    id="accountLink"
+                    class="account-greeting account-trigger"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="accountDropdown"
+                >
+                    <span class="account-avatar" id="accountAvatar">
+                        👤
+                    </span>
+
+                    <span id="accountGreeting">
+                        Xin chào
+                    </span>
+
+                    <span class="account-chevron"></span>
+                </button>
+
+                <!-- Nội dung menu xổ xuống -->
+                <div
+                    id="accountDropdown"
+                    class="account-dropdown"
+                    hidden
+                >
+
+                    <!-- Thông tin tài khoản -->
+                    <div class="account-user-card">
+
+                        <div class="account-user-info">
+                            <span
+                                class="account-avatar account-avatar-large"
+                                id="accountDropdownAvatar">
+                                👤
+                            </span>
+
+                            <div>
+                                <strong id="accountMenuName">
+                                    Khách hàng
+                                </strong>
+
+                                <small>Tài khoản Laptop Store</small>
+                            </div>
+                        </div>
+
+                        <a
+                            href="profile.html"
+                            class="account-profile-button">
+                            👤 Xem thông tin cá nhân
+                        </a>
+                    </div>
+
+                    <!-- Danh sách chức năng -->
+                    <div class="account-menu-items">
+
+                        <a
+                            href="orders.html"
+                            class="account-menu-item">
+                            <span class="account-menu-icon">📦</span>
+                            <span>Đơn hàng của tôi</span>
+                            <span class="account-menu-arrow">›</span>
+                        </a>
+
+                        <div class="account-menu-divider"></div>
+
+                        <!-- Đăng xuất -->
+                        <button
+                            type="button"
+                            id="headerLogout"
+                            class="account-menu-item account-logout">
+
+                            <span class="account-menu-icon">🚪</span>
+                            <span>Đăng xuất</span>
+                        </button>
+                    </div>
+
+                </div>
+            </div>
 
              <!-- Chỉ hiển thị khi đăng nhập tài khoản Admin -->
             <a
@@ -44,11 +120,6 @@
                 ⚙️ Vào quản lý
             </a>
         </nav>
-
-        <!-- Giới thiệu chatbot -->
-        <span class="header-label">
-            Tư vấn laptop AI
-        </span>
 
     </div>
 </header>

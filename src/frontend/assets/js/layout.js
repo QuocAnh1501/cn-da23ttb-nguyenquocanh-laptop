@@ -20,12 +20,35 @@ async function loadComponent(elementId, filePath) {
     element.innerHTML = html;
 }
 
-// 2. Hiển thị tên khách hàng nếu đã đăng nhập
-async function updateHeaderAccount() {
-    const accountLink = document.getElementById("accountLink");
-    const token = sessionStorage.getItem("laptop_token");
 
-    if (!accountLink || !token) return;
+// ===============================================
+// CẬP NHẬT THÔNG TIN TÀI KHOẢN TRÊN HEADER
+// ===============================================
+async function updateHeaderAccount() {
+    const accountMenu =
+        document.getElementById("accountMenu");
+
+    const loginLink =
+        document.getElementById("loginLink");
+
+    const adminPanelLink =
+        document.getElementById("adminPanelLink");
+
+    const token =
+        sessionStorage.getItem("laptop_token");
+
+    if (!accountMenu) return;
+
+    // Mặc định: chưa đăng nhập
+    accountMenu.hidden = true;
+
+    if (loginLink) loginLink.hidden = false;
+
+    if (adminPanelLink) {
+        adminPanelLink.hidden = true;
+    }
+
+    if (!token) return;
 
     try {
         const response = await fetch(
@@ -37,46 +60,126 @@ async function updateHeaderAccount() {
             }
         );
 
-        // Token hết hạn hoặc không hợp lệ
+        // Token hết hạn
         if (response.status === 401) {
             sessionStorage.removeItem("laptop_token");
             return;
         }
 
         if (!response.ok) {
-            throw new Error("Không lấy được thông tin tài khoản");
+            throw new Error(
+                "Không lấy được thông tin tài khoản"
+            );
         }
 
         const result = await response.json();
         const user = result.data;
 
-        // Hiển thị nút quản lý nếu người dùng là Admin
-        const adminPanelLink =
-            document.getElementById("adminPanelLink");
+        if (!user || !user.full_name) return;
 
-        if (adminPanelLink) {
-            adminPanelLink.hidden = user?.role !== "admin";
-}
-
-        if (user?.full_name) {
-            const loginLink = document.getElementById("loginLink");
-
-            // Đã đăng nhập thì ẩn nút Đăng nhập
-            if (loginLink) {
-                loginLink.hidden = true;
-            }
-
-            // Hiển thị lời chào khách hàng
-            accountLink.textContent =
-                `👤 Xin chào, ${user.full_name}`;
-
-            accountLink.hidden = false;
+        // Ẩn nút đăng nhập
+        if (loginLink) {
+            loginLink.hidden = true;
         }
 
+        // Hiển thị menu tài khoản
+        accountMenu.hidden = false;
+
+        // Hiển thị tên trên Header
+        document.getElementById("accountGreeting")
+            .textContent = `Xin chào, ${user.full_name}`;
+
+        // Hiển thị tên trong menu xổ xuống
+        document.getElementById("accountMenuName")
+            .textContent = user.full_name;
+
+        // Avatar sử dụng chữ cái đầu của tên
+        const initial = user.full_name
+            .trim()
+            .charAt(0)
+            .toUpperCase();
+
+        document.getElementById("accountAvatar")
+            .textContent = initial;
+
+        document.getElementById("accountDropdownAvatar")
+            .textContent = initial;
+
+        // Giữ nguyên chức năng Admin
+        if (adminPanelLink) {
+            adminPanelLink.hidden =
+                user.role !== "admin";
+        }
 
     } catch (error) {
-        console.error("Lỗi tải tài khoản:", error);
+        console.error(
+            "Lỗi tải tài khoản:",
+            error
+        );
     }
+}
+
+// ===============================================
+// MENU TÀI KHOẢN XỔ XUỐNG
+// ===============================================
+function setupAccountDropdown() {
+    const menu =
+        document.getElementById("accountMenu");
+
+    const toggle =
+        document.getElementById("accountLink");
+
+    const dropdown =
+        document.getElementById("accountDropdown");
+
+    const logoutButton =
+        document.getElementById("headerLogout");
+
+    if (!menu || !toggle || !dropdown) return;
+
+    // Đóng menu
+    function closeDropdown() {
+        dropdown.hidden = true;
+
+        toggle.setAttribute(
+            "aria-expanded",
+            "false"
+        );
+    }
+
+    // Bấm tên tài khoản để mở hoặc đóng
+    toggle.addEventListener("click", () => {
+        const isOpen = !dropdown.hidden;
+
+        dropdown.hidden = isOpen;
+
+        toggle.setAttribute(
+            "aria-expanded",
+            String(!isOpen)
+        );
+    });
+
+    // Bấm ra ngoài sẽ tự đóng
+    document.addEventListener("click", (event) => {
+        if (!menu.contains(event.target)) {
+            closeDropdown();
+        }
+    });
+
+    // Nhấn ESC để đóng menu
+    document.addEventListener("keydown", (event) => {
+        if (event.key === "Escape") {
+            closeDropdown();
+            toggle.focus();
+        }
+    });
+
+    // Đăng xuất tài khoản
+    logoutButton?.addEventListener("click", () => {
+        sessionStorage.removeItem("laptop_token");
+
+        window.location.replace("login.html");
+    });
 }
 
 // 3. Tải Header và Footer
@@ -94,7 +197,10 @@ async function loadLayout() {
             )
         ]);
 
-        // Chạy sau khi Header đã được đưa vào trang
+        // Gắn sự kiện sau khi Header được tải
+        setupAccountDropdown();
+
+        // Hiển thị thông tin tài khoản
         await updateHeaderAccount();
 
     } catch (error) {

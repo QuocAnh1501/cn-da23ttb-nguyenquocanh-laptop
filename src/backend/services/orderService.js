@@ -57,7 +57,27 @@ async function createOrder(userId, data) {
     if (!["cod", "bank_transfer"].includes(payment_method)) {
         throw createError("Phương thức thanh toán không hợp lệ");
     }
+    // Kiểm tra ID các dòng giỏ hàng khách đã chọn
+    const cartItemIds = data.cart_item_ids;
 
+    if (
+        !Array.isArray(cartItemIds) ||
+        cartItemIds.length === 0 ||
+        cartItemIds.length > 100 ||
+        !cartItemIds.every(id =>
+            typeof id === "number" &&
+            Number.isSafeInteger(id) &&
+            id > 0
+        ) ||
+        new Set(cartItemIds).size !== cartItemIds.length
+    ) {
+        throw createError(
+            "Danh sách sản phẩm thanh toán không hợp lệ",
+            400
+        );
+    }
+
+    const selectedIdSet = new Set(cartItemIds);
     if (
         typeof receiver_name !== "string" ||
         !receiver_name.trim() ||
@@ -104,7 +124,18 @@ async function createOrder(userId, data) {
             connection,
             cart.id
         );
+        // Chỉ lấy các dòng đã chọn và thuộc giỏ của khách
+        const selectedCartItems = cartItems.filter(item =>
+            selectedIdSet.has(Number(item.id))
+        );
 
+        // Không cho đặt sản phẩm không nằm trong giỏ
+        if (selectedCartItems.length !== selectedIdSet.size) {
+            throw createError(
+                "Có sản phẩm đã chọn không tồn tại trong giỏ",
+                400
+            );
+        }
         if (cartItems.length === 0) {
             throw createError("Giỏ hàng đang trống");
         }
@@ -113,7 +144,7 @@ async function createOrder(userId, data) {
         let totalCents = 0n;
 
         // Kiểm tra từng sản phẩm
-        for (const item of cartItems) {
+        for (const item of selectedCartItems) {
             const product = await orderModel.getProductForUpdate(
                 connection,
                 item.product_id
@@ -192,8 +223,12 @@ async function createOrder(userId, data) {
             }
         }
 
-        // Xóa sản phẩm khỏi giỏ sau khi đặt hàng
-        await orderModel.clearCart(connection, cart.id);
+        // Chỉ xóa các dòng giỏ hàng đã thanh toán
+        await orderModel.removeSelectedCartItems(
+            connection,
+            cart.id,
+            selectedCartItems.map(item => item.id)
+        );
 
         // Hoàn tất transaction
         await connection.commit();

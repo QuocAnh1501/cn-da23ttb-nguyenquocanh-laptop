@@ -1,6 +1,7 @@
 
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
@@ -8,72 +9,137 @@
 
     <title>Giỏ hàng - Laptop Store</title>
 
+    <!-- CSS giao diện -->
     <link rel="stylesheet" href="assets/css/style.css">
 
+    <!-- JavaScript -->
     <script src="assets/js/layout.js" defer></script>
     <script src="assets/js/cart.js" defer></script>
 </head>
+
 <body>
 
+    <!-- HEADER -->
     <div id="site-header"></div>
 
     <main class="container cart-page">
+
+        <!-- Quay lại mua sắm -->
         <a href="index.html#products" class="back-link">
             ← Tiếp tục mua sắm
         </a>
 
-        <h1>🛒 Giỏ hàng của tôi</h1>
+        <!-- TIÊU ĐỀ GIỎ HÀNG -->
+        <div class="cart-title">
+            <h1>🛒 Giỏ hàng của tôi</h1>
 
-        <p id="cartStatus"
-           role="status"
-           aria-live="polite">
-            Đang tải giỏ hàng...
-        </p>
+            <!-- JS tự cập nhật số sản phẩm và thông báo -->
+            <p id="cartStatus"
+               role="status"
+               aria-live="polite">
+                Đang tải giỏ hàng...
+            </p>
+        </div>
 
+        <!-- =====================================
+             BỐ CỤC GIỎ HÀNG HAI CỘT
+             ===================================== -->
         <div class="cart-layout">
 
-            <!-- Danh sách laptop trong giỏ -->
-            <section
-                id="cartItems"
-                class="cart-items"
-                aria-label="Sản phẩm trong giỏ hàng">
+            <!-- =================================
+                 CỘT TRÁI: DANH SÁCH SẢN PHẨM
+                 ================================= -->
+            <section class="cart-main">
+
+                <!-- Chọn tất cả sản phẩm -->
+                <div id="cartSelectionToolbar"
+                     class="cart-select-all cart-selection-toolbar"
+                     hidden>
+
+                    <label for="selectAllCartItems">
+                        <input
+                            type="checkbox"
+                            id="selectAllCartItems">
+
+                        <span>Chọn tất cả sản phẩm</span>
+                    </label>
+
+                </div>
+
+                <!--
+                    Danh sách laptop được tạo bởi cart.js
+                    Có checkbox, hình ảnh, số lượng, xóa
+                -->
+                <div id="cartItems"
+                     class="cart-items"
+                     aria-label="Sản phẩm trong giỏ hàng">
+                </div>
+
             </section>
 
-            <!-- Tổng kết giỏ hàng -->
+            <!-- =================================
+                 CỘT PHẢI: THANH TOÁN
+                 ================================= -->
             <aside id="cartSummary"
-                   class="cart-summary"
+                   class="cart-sidebar"
                    hidden>
 
-                <h2>Thông tin giỏ hàng</h2>
+                <div class="cart-summary-card">
 
-                <div class="cart-summary-row">
-                    <span>Tổng số lượng</span>
-                    <strong id="totalQuantity">0</strong>
+                    <h2>Thông tin giỏ hàng</h2>
+
+                    <!-- Tổng số lượng được chọn -->
+                    <div class="summary-row">
+                        <span>Số lượng đã chọn</span>
+
+                        <strong id="totalQuantity">
+                            0
+                        </strong>
+                    </div>
+
+                    <!-- Tổng tiền sản phẩm đã chọn -->
+                    <div class="summary-row">
+                        <span>Tổng tiền thanh toán</span>
+
+                        <strong id="cartTotal">
+                            0 đ
+                        </strong>
+                    </div>
+
+                    <!-- Ghi chú -->
+                    <p class="summary-note">
+                        Tổng tiền chỉ tính những sản phẩm
+                        đã được chọn trong giỏ hàng.
+                    </p>
+
+                    <!-- Nút thanh toán -->
+                    <button
+                        type="button"
+                        id="checkoutSelectedButton"
+                        class="primary-button checkout-button"
+                        disabled>
+
+                        Thanh toán sản phẩm đã chọn
+                    </button>
+
+                    <!-- Xóa toàn bộ giỏ hàng -->
+                    <button
+                        type="button"
+                        id="clearCartButton"
+                        class="text-danger-button">
+
+                        Xóa toàn bộ giỏ hàng
+                    </button>
+
                 </div>
-
-                <div class="cart-summary-row">
-                    <span>Tổng tiền</span>
-                    <strong id="cartTotal">0đ</strong>
-                </div>
-
-                <p class="cart-summary-note">
-                    Tổng tiền được tính từ giá sản phẩm
-                    hiện tại trong cửa hàng.
-                </p>
-                <a href="checkout.html" class="btn-primary checkout-button">
-                    Tiến hành đặt hàng
-                </a>
-                <button
-                    type="button"
-                    id="clearCartButton"
-                    class="cart-clear-button">
-                    Xóa toàn bộ giỏ hàng
-                </button>
 
             </aside>
+
         </div>
+
     </main>
 
+    <!-- FOOTER -->
     <div id="site-footer"></div>
 
 </body>
